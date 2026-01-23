@@ -43,4 +43,75 @@ public class Park {
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     Set<Animal> animals = new HashSet<>();
+
+    
+
+    public Park(String name) {
+        this.name = name;
+        this.URLSlug = createSlug(name);
+    }
+
+    private String createSlug(String parkName) {
+        String slug = "General-Park";
+        if(!parkName.isEmpty()){
+            slug = parkName.toLowerCase().trim().replaceAll("'.*/!@#\\$%\\^&\\*\\(\\)\\?/;:'\"~`", "").replaceAll("\\s+", "-");
+        }
+        return slug;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getURLSlug() {
+        return URLSlug;
+    }
+
+    public void setURLSlug(String uRLSlug) {
+        URLSlug = uRLSlug;
+    }
+
+    public Polygon getBoundary() {
+        return boundary;
+    }
+
+    public void setBoundary(Polygon boundary) {
+        this.boundary = boundary;
+    }
+
+    public Point getMapCenter() {
+        return mapCenter;
+    }
+
+    public void setMapCenter(Point mapCenter) {
+        this.mapCenter = mapCenter;
+    }
+
+    public List<Sighting> getSightings() {
+        return sightings;
+    }
+
+    public void setSightings(List<Sighting> sightings) {
+        this.sightings = sightings;
+    }
+
+    public Set<Animal> getAnimals() {
+        return animals;
+    }
+
+    public void setAnimals(Set<Animal> animals) {
+        this.animals = animals;
+    }
 }

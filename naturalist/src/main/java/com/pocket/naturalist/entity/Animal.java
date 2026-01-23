@@ -35,6 +35,9 @@ public class Animal {
         this.commonName = commonName;
         this.description = description;
     }
+    
+    public Animal() {
+    }
 
     public long getId() {
         return id;

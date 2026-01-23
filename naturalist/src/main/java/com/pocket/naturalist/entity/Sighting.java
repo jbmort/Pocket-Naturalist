@@ -43,7 +43,10 @@ public class Sighting {
             this.locationOfReport = locationOfReport;
             this.park = park;
         }
-        
+
+    public Sighting() {
+    }
+
     public long getId() {
         return id;
     }
