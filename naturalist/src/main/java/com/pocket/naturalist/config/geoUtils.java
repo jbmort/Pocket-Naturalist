@@ -38,4 +38,27 @@ public class geoUtils {
         // within() checks if the point is within or on the boundary
         return jtsPolygon.contains(jtsPoint);
     }
+
+    public static Polygon createPolygonFromJTSPolygon(org.locationtech.jts.geom.Polygon jtsPolygon) {
+        List<Point> springPoints =  java.util.Arrays.stream(jtsPolygon.getCoordinates())
+                .map(coord -> new Point(coord.x, coord.y))
+                .collect(Collectors.toList());
+
+        return new Polygon(springPoints);
+    }
+
+    public static org.locationtech.jts.geom.Polygon createJTSPolygonFromPolygon(Polygon springPolygon) {
+        List<Coordinate> coordinates = springPolygon.getPoints().stream()
+                .map(p -> new Coordinate(p.getX(), p.getY()))
+                .collect(Collectors.toList());
+
+        // Ensure the polygon is closed
+        if (!coordinates.get(0).equals(coordinates.get(coordinates.size() - 1))) {
+            coordinates.add(coordinates.get(0));
+        }
+
+        Coordinate[] coordsArray = coordinates.toArray(new Coordinate[0]);
+        LinearRing ring = geometryFactory.createLinearRing(coordsArray);
+        return geometryFactory.createPolygon(ring, null);
+    }
 }

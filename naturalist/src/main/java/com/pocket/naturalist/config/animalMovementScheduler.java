@@ -9,6 +9,11 @@ import com.pocket.naturalist.entity.Sighting;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.Polygon;
 import org.springframework.data.geo.Point;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -16,38 +21,62 @@ import org.springframework.scheduling.annotation.Scheduled;
 @Component
 public class animalMovementScheduler {
 
-    Park park;
+   
+
+    Coordinate[] coords = new Coordinate[] {
+        new Coordinate(-93.295, 41.565),
+        new Coordinate(-93.250, 41.565),
+        new Coordinate(-93.250, 41.535),
+        new Coordinate(-93.295, 41.535),
+        new Coordinate(-93.295, 41.565)
+    };
+    GeometryFactory geometryFactory = new GeometryFactory();
+    LinearRing shell = geometryFactory.createLinearRing(coords);
+    Polygon boundary = geometryFactory.createPolygon(shell, null);
+    
+    Point mapCenter = new Point(-93.2725, 41.550);
+    Park park = new Park("Test Park", boundary, mapCenter);
 
     Animal bison = new Animal("Bison bison", "American Bison", "A large, grazing mammal native to North America.");
 
-    Sighting bisonSighting1 = new Sighting(bison, new Point(-105.0, 40.0), new Point(-104.0, 41.0), park);
-    Sighting bisonSighting2 = new Sighting(bison, new Point(-106.0, 39.5), new Point(-105.5, 40.5), park);
-    Sighting bisonSighting3 = new Sighting(bison, new Point(-104.5, 40.5), new Point(-104.0, 41.0), park);
-    Sighting bisonSighting4 = new Sighting(bison, new Point(-105.5, 39.0), new Point(-105.0, 40.0), park);
+    Sighting bisonSighting1 = new Sighting(bison, new Point(-93.2725, 41.550), new Point(-93.2725, 41.550), park);
+    Sighting bisonSighting2 = new Sighting(bison, new Point(-93.2725, 41.550), new Point(-93.2725, 41.550), park);
+    Sighting bisonSighting3 = new Sighting(bison, new Point(-93.2725, 41.550), new Point(-93.2725, 41.550), park);
+    Sighting bisonSighting4 = new Sighting(bison, new Point(-93.2725, 41.550), new Point(-93.2725, 41.550), park);
 
     List<Sighting> sightings =List.of(bisonSighting1, bisonSighting2, bisonSighting3, bisonSighting4);
 
-    @Scheduled(fixedRate = 3000)
-    public void simulateAnimalMovement() {
+    // @Scheduled(fixedRate = 3000)
+    public List<Sighting> simulateAnimalMovement() {
         
         for(var sighting : sightings){
-            moveAnimal(sighting);
+            System.out.println("Current Sighting Location: " + sighting.getLocationOfAnimal());
+            sighting = moveAnimal(sighting);
+            System.out.println("Updated Sighting Location: " + sighting.getLocationOfAnimal());
+
         }
 
         System.out.println("Simulating animal movement...");
+
+        return sightings;
     }
 
-    private void moveAnimal(Sighting sighting) {
+    private Sighting moveAnimal(Sighting sighting) {
+
+        Sighting updatedSighting = sighting;
         double newLng = 0.0;
         double newLat = 0.0;
         do{
-        newLng = sighting.getLocationOfAnimal().getX() + (Math.random() - 0.5) * 0.1;
-        newLat = sighting.getLocationOfAnimal().getY() + (Math.random() - 0.5) * 0.1;
+        newLng = sighting.getLocationOfAnimal().getX() + (Math.random() - 0.5) * 0.01;
+        newLat = sighting.getLocationOfAnimal().getY() + (Math.random() - 0.5) * 0.01;
+        // newLng = sighting.getLocationOfAnimal().getX() + .001;
+        // newLat = sighting.getLocationOfAnimal().getY() + .001;
         }
         while(!geoUtils.isPointInPolygon(new Point(newLng, newLat), sighting.getPark().getBoundary()));
         
-        sighting.setLocationOfAnimal(new Point(newLng, newLat));
+        updatedSighting.setLocationOfAnimal(new Point(newLng, newLat));
+        return updatedSighting;
     }
-
+    
     
 }

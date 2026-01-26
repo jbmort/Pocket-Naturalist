@@ -8,6 +8,8 @@ import java.util.Set;
 import org.springframework.data.geo.Point;
 import org.springframework.data.geo.Polygon;
 
+import com.pocket.naturalist.config.geoUtils;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -50,6 +52,13 @@ public class Park {
         this.name = name;
         this.URLSlug = createSlug(name);
     }
+
+   public Park(String name, org.locationtech.jts.geom.Polygon boundary2, Point mapCenter) {
+         this.name = name;
+         this.URLSlug = createSlug(name);
+         this.boundary = geoUtils.createPolygonFromJTSPolygon(boundary2);
+         this.mapCenter = mapCenter;
+   }
 
     private String createSlug(String parkName) {
         String slug = "General-Park";
