@@ -6,16 +6,12 @@ import com.pocket.naturalist.entity.Animal;
 import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.entity.Sighting;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LinearRing;
 import org.locationtech.jts.geom.Polygon;
-// import org.springframework.data.geo.Point;
 import org.springframework.scheduling.annotation.Scheduled;
 
 

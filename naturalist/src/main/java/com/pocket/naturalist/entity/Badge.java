@@ -17,7 +17,7 @@ public class Badge {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String url;
 
     public Badge(String name, String url) {
