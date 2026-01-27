@@ -5,10 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.data.geo.Point;
-import org.springframework.data.geo.Polygon;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 
-import com.pocket.naturalist.config.geoUtils;
+// import org.springframework.data.geo.Point;
+// import org.springframework.data.geo.Polygon;
+
+// import com.pocket.naturalist.config.geoUtils;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -56,14 +59,14 @@ public class Park {
    public Park(String name, org.locationtech.jts.geom.Polygon boundary2, Point mapCenter) {
          this.name = name;
          this.URLSlug = createSlug(name);
-         this.boundary = geoUtils.createPolygonFromJTSPolygon(boundary2);
+         this.boundary = boundary2;
          this.mapCenter = mapCenter;
    }
 
     private String createSlug(String parkName) {
         String slug = "General-Park";
         if(!parkName.isEmpty()){
-            slug = parkName.toLowerCase().trim().replaceAll("'.*/!@#\\$%\\^&\\*\\(\\)\\?/;:'\"~`", "").replaceAll("\\s+", "-");
+            slug = parkName.toLowerCase().trim().replaceAll("[^a-zA-Z0-9\\s]", "").replaceAll("\\s+", "-");
         }
         return slug;
     }

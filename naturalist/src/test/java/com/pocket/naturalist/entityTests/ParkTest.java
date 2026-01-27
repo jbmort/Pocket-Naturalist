@@ -1,8 +1,11 @@
 package com.pocket.naturalist.entityTests;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.geo.Point;
-import org.springframework.data.geo.Polygon;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 
 import com.pocket.naturalist.entity.Animal;
 import com.pocket.naturalist.entity.Park;
@@ -19,7 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class ParkTest {
+    GeometryFactory geometryFactory;
 
+    @BeforeEach
+    public void setUp() {
+        geometryFactory = new GeometryFactory();
+    }
     @Test
     void constructor_setsNameAndSlug() {
         Park park = new Park("Yellowstone National Park");
@@ -57,13 +65,13 @@ class ParkTest {
     @Test
     void setAndGetBoundary() {
         Park park = new Park("Test Park");
-        Polygon polygon = new Polygon(Arrays.asList(
-                new Point(0, 0),
-                new Point(1, 0),
-                new Point(1, 1),
-                new Point(0, 1),
-                new Point(0, 0)
-        ));
+        Polygon polygon = geometryFactory.createPolygon(geometryFactory.createLinearRing(new Coordinate[] {
+                new Coordinate(0, 0),
+                new Coordinate(1, 0),
+                new Coordinate(1, 1),
+                new Coordinate(0, 1),
+                new Coordinate(0, 0)
+        }), null);  
         park.setBoundary(polygon);
         assertEquals(polygon, park.getBoundary());
     }
@@ -71,7 +79,7 @@ class ParkTest {
     @Test
     void setAndGetMapCenter() {
         Park park = new Park("Test Park");
-        Point center = new Point(5, 10);
+        Point center = geometryFactory.createPoint(new Coordinate(5, 10));
         park.setMapCenter(center);
         assertEquals(center, park.getMapCenter());
     }

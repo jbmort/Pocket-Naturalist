@@ -2,7 +2,7 @@ package com.pocket.naturalist.entity;
 
 import java.time.LocalDateTime;
 
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
