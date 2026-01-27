@@ -8,11 +8,6 @@ import java.util.Set;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 
-// import org.springframework.data.geo.Point;
-// import org.springframework.data.geo.Polygon;
-
-// import com.pocket.naturalist.config.geoUtils;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,6 +40,9 @@ public class Park {
 
     @OneToMany(mappedBy = "park", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Sighting> sightings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "park", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Feature> features = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     Set<Animal> animals = new HashSet<>();
