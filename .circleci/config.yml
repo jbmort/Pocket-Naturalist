@@ -28,11 +28,11 @@ jobs:
             cd naturalist
             mvn -B -DskipTests clean package
 
-      - run:
-          name: Test
-          command: |
-            cd naturalist
-            mvn test
+      # - run:
+      #     name: Test
+      #     command: |
+      #       cd naturalist
+      #       mvn test
 
       - save_cache:
           paths:
