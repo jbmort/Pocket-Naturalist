@@ -33,7 +33,7 @@ public class Park {
     String URLSlug;
 
     @Column(columnDefinition = "geometry(Polygon, 4326)")
-    Polygon boundary;
+    List<Polygon> boundaryList;
 
     @Column(columnDefinition = "geometry(Point, 4326)")
     Point mapCenter;
@@ -54,10 +54,10 @@ public class Park {
         this.URLSlug = createSlug(name);
     }
 
-   public Park(String name, org.locationtech.jts.geom.Polygon boundary2, Point mapCenter) {
+   public Park(String name, List<Polygon> boundaries, Point mapCenter) {
          this.name = name;
          this.URLSlug = createSlug(name);
-         this.boundary = boundary2;
+         this.boundaryList = boundaries;
          this.mapCenter = mapCenter;
    }
 
@@ -93,12 +93,19 @@ public class Park {
         URLSlug = uRLSlug;
     }
 
-    public Polygon getBoundary() {
-        return boundary;
+    public List<Polygon> getBoundaryList() {
+        return boundaryList;
     }
 
-    public void setBoundary(Polygon boundary) {
-        this.boundary = boundary;
+    public void setBoundaryList(List<Polygon> boundaryList) {
+        this.boundaryList = boundaryList;
+    }
+
+    public void addBoundary(Polygon boundary) {
+        if(this.boundaryList == null){
+            this.boundaryList = new ArrayList<>();
+        }
+        this.boundaryList.add(boundary);
     }
 
     public Point getMapCenter() {

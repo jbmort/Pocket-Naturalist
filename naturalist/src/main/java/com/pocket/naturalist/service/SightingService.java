@@ -1,19 +1,17 @@
 package com.pocket.naturalist.service;
 
-import java.util.List;
 
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 
-import com.pocket.naturalist.dto.SightingPointDTO;
-import com.pocket.naturalist.entity.Animal;
-import com.pocket.naturalist.entity.Park;
+import com.pocket.naturalist.dto.SightingMapDTO;
+
 
 @Service
 public interface SightingService {
 
-    boolean createSighting(Animal animal, Point locationOfAnimal, Point locationOfReport, Park park);
+    boolean createSighting(String animalName, Point locationOfAnimal, Point locationOfReport, String parkSlug);
 
-    List<SightingPointDTO> getSightingsForPark(long parkID);
+    SightingMapDTO getSightingsForPark(String parkSlug);
     
 }

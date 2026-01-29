@@ -72,8 +72,8 @@ class ParkTest {
                 new Coordinate(0, 1),
                 new Coordinate(0, 0)
         }), null);  
-        park.setBoundary(polygon);
-        assertEquals(polygon, park.getBoundary());
+        park.setBoundaryList(List.of(polygon));
+        assertEquals(polygon, park.getBoundaryList().get(0));
     }
 
     @Test
