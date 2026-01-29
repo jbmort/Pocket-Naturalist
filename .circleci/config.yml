@@ -4,8 +4,8 @@ jobs:
   build-and-test:
     docker:
       - image: maven:3.9.4-eclipse-temurin-21
-    # Set the working directory to the folder that contains your pom.xml
-    working_directory: ~/project/naturalist
+    # Use the repo root as working dir so checkout places the repo here
+    working_directory: ~/project
 
     steps:
       - checkout
@@ -15,14 +15,7 @@ jobs:
           command: |
             echo "Working dir: $(pwd)"
             ls -la
-            # show the first lines of the pom to confirm we're in the right place
-            if [ -f pom.xml ]; then
-              echo "Found pom.xml:"
-              sed -n '1,20p' pom.xml
-            else
-              echo "pom.xml not found here"
-              find .. -maxdepth 3 -name pom.xml -print || true
-            fi
+            find . -maxdepth 3 -name pom.xml -print || true
 
       - restore_cache:
           keys:
@@ -31,11 +24,15 @@ jobs:
 
       - run:
           name: Build
-          command: mvn -B -DskipTests clean package
+          command: |
+            cd naturalist
+            mvn -B -DskipTests clean package
 
       - run:
           name: Test
-          command: mvn test
+          command: |
+            cd naturalist
+            mvn test
 
       - save_cache:
           paths:
