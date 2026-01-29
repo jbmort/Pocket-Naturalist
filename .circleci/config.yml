@@ -4,8 +4,22 @@ jobs:
   build-and-test:
     docker:
       - image: maven:3.9.4-eclipse-temurin-21
-    # Use the repo root as working dir so checkout places the repo here
+      - image: postgres:15
+        environment:
+          POSTGRES_DB: naturalist
+          POSTGRES_USER: ci_user
+          POSTGRES_PASSWORD: ci_password
+
     working_directory: ~/project
+
+    environment:
+      # Tell Spring Boot to use the CI Postgres service
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/naturalist
+      SPRING_DATASOURCE_USERNAME: ci_user
+      SPRING_DATASOURCE_PASSWORD: ci_password
+      # Optional: disable Flyway/Liquibase or adjust if you use one of them
+      # SPRING_LIQUIBASE_ENABLED: "false"
+      # SPRING_FLYWAY_ENABLED: "false"
 
     steps:
       - checkout
@@ -17,22 +31,35 @@ jobs:
             ls -la
             find . -maxdepth 3 -name pom.xml -print || true
 
+      - run:
+          name: Wait for Postgres to accept connections
+          command: |
+            echo "Waiting for Postgres on localhost:5432..."
+            for i in $(seq 1 30); do
+              if (echo > /dev/tcp/localhost/5432) >/dev/null 2>&1; then
+                echo "Postgres is up"
+                break
+              fi
+              echo "Postgres not ready yet (attempt $i/30)..."
+              sleep 2
+            done
+
       - restore_cache:
           keys:
             - maven-repo-{{ checksum "naturalist/pom.xml" }}
             - maven-repo-
 
       - run:
-          name: Build
+          name: Build (package)
           command: |
             cd naturalist
             mvn -B -DskipTests clean package
 
-      # - run:
-      #     name: Test
-      #     command: |
-      #       cd naturalist
-      #       mvn test
+      - run:
+          name: Test
+          command: |
+            cd naturalist
+            mvn test
 
       - save_cache:
           paths:
