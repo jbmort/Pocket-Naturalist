@@ -3,26 +3,44 @@ version: 2.1
 jobs:
   build-and-test:
     docker:
-      - image: maven:3.9.4-eclipse-temurin-21   # Docker Hub official maven image with Java 21
+      - image: maven:3.9.4-eclipse-temurin-21
+    # Set the working directory to the folder that contains your pom.xml
+    working_directory: ~/project/naturalist
 
     steps:
       - checkout
 
-      # Cache local maven repo between builds
+      - run:
+          name: Debug workspace
+          command: |
+            echo "Working dir: $(pwd)"
+            ls -la
+            # show the first lines of the pom to confirm we're in the right place
+            if [ -f pom.xml ]; then
+              echo "Found pom.xml:"
+              sed -n '1,20p' pom.xml
+            else
+              echo "pom.xml not found here"
+              find .. -maxdepth 3 -name pom.xml -print || true
+            fi
+
       - restore_cache:
           keys:
-            - maven-repo-{{ checksum "pom.xml" }}
+            - maven-repo-{{ checksum "naturalist/pom.xml" }}
             - maven-repo-
+
       - run:
           name: Build
-          command: mvn -B -DskipTests -f naturalist/pom.xml clean package
+          command: mvn -B -DskipTests clean package
+
       - run:
           name: Test
           command: mvn test
+
       - save_cache:
           paths:
             - ~/.m2/repository
-          key: maven-repo-{{ checksum "pom.xml" }}
+          key: maven-repo-{{ checksum "naturalist/pom.xml" }}
 
 workflows:
   sample:
