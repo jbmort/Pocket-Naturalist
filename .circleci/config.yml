@@ -15,7 +15,7 @@ jobs:
             - maven-repo-
       - run:
           name: Build
-          command: mvn -B -DskipTests -f Wildlife-Mapper/naturalist/pom.xml clean package
+          command: mvn -B -DskipTests -f naturalist/pom.xml clean package
       - run:
           name: Test
           command: mvn test
