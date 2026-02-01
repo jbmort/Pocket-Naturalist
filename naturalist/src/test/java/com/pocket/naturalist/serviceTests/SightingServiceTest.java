@@ -1,72 +1,87 @@
 package com.pocket.naturalist.serviceTests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Set;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.pocket.naturalist.dto.SightingMapDTO;
 import com.pocket.naturalist.entity.Animal;
 import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.entity.Sighting;
+import com.pocket.naturalist.repository.AnimalRepository;
+import com.pocket.naturalist.repository.ParkRepository;
 import com.pocket.naturalist.repository.SightingsRepository;
 
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.locationtech.jts.geom.Coordinate;
 
-import com.pocket.naturalist.service.SightingService;
+import com.pocket.naturalist.service.SightingServiceImpl;
 
-
-
-public class SightingServiceTest {
+@ExtendWith(MockitoExtension.class)
+class SightingServiceTest {
 
     private GeometryFactory geometryFactory = new GeometryFactory();
 
-    @Autowired
-    private SightingService sightingService;
+    @InjectMocks
+    private SightingServiceImpl sightingService;
 
-    @MockitoBean
+    @Mock
     private SightingsRepository sightingsRepository;
 
-    SightingServiceTest(SightingService sightingService) {
-        this.sightingService = sightingService;
-    }
+    @Mock
+    private ParkRepository parkRepository;
 
+    @Mock
+    private AnimalRepository animalRepository;
 
+   
 
     @Test
-    public void testCreateSighting() {
+    void testCreateSighting() {
+        when(animalRepository.findByName("animal")).thenReturn(new Animal("animal", "Animal", "An animal")) ;
+        when(parkRepository.findBySlug("yellowstone"))
+        .thenReturn(new Park("Yellowstone"));
+
         Point locationOfAnimal = geometryFactory.createPoint(new Coordinate(-110.5885, 44.4279));
         Point locationOfReport = geometryFactory.createPoint(new Coordinate(-110.5880, 44.4280));
 
         boolean result = sightingService.createSighting("animal", locationOfAnimal, locationOfReport, "yellowstone");
 
-        assert(result);
+        assertTrue(result);
     }
 
     @Test
-    public void shouldReturnListOfSightings() {
-        long parkID = 1L;
-        Animal animal = new Animal();
+    void shouldReturnListOfSightings() {
+        Animal animal = new Animal("Canis lupus", "Gray Wolf", "A large canine native to North America and Eurasia.");
         Point locationOfAnimal = geometryFactory.createPoint(new Coordinate(-110.5885, 44.4279));
         Point locationOfReport = geometryFactory.createPoint(new Coordinate(-110.5880, 44.4280));
         Park park = new Park("Yellowstone");
+        park.setAnimals(Set.of(animal));
 
-        when(sightingsRepository.getSightingsForPark(parkID))
+        when(sightingsRepository.getSightingsByPark(park))
         .thenReturn(List.of(
             new Sighting(animal, locationOfAnimal, locationOfReport, park)));
 
+        when(parkRepository.findBySlug("yellowstone"))
+        .thenReturn(park);
+
         SightingMapDTO sightings = sightingService.getSightingsForPark(park.getURLSlug());
 
-        assert(sightings != null);
-        assert(sightings.animalLocations().size() == 1);
-        assert(sightings.animalLocations().get(0).locations().size() == 1);
-        assert(sightings.park()).equals("Yellowstone");
+        assertNotNull(sightings);
+        assertEquals(1, sightings.animalLocations().size());
+        assertEquals(1, sightings.animalLocations().get(0).locations().size());
+        assertEquals("yellowstone", sightings.park());
     }
 
 }

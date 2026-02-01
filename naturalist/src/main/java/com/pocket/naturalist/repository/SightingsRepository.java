@@ -1,10 +1,13 @@
 package com.pocket.naturalist.repository;
 
-public class SightingsRepository {
+import java.util.List;
 
-    public Object getSightingsForPark(long parkID) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getSightingsForPark'");
-    }
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.pocket.naturalist.entity.Park;
+import com.pocket.naturalist.entity.Sighting;
+
+public interface SightingsRepository extends JpaRepository<Sighting, Long>{
+    List<Sighting> getSightingsByPark(Park park);
     
 }
