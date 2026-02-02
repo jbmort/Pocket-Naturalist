@@ -8,6 +8,6 @@ import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.entity.Sighting;
 
 public interface SightingsRepository extends JpaRepository<Sighting, Long>{
-    List<Sighting> getSightingsByPark(Park park);
+    List<Sighting> findAllByPark(Park park);
     
 }

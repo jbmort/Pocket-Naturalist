@@ -49,8 +49,8 @@ class SightingServiceTest {
 
     @Test
     void testCreateSighting() {
-        when(animalRepository.findByName("animal")).thenReturn(new Animal("animal", "Animal", "An animal")) ;
-        when(parkRepository.findBySlug("yellowstone"))
+        when(animalRepository.findByCommonName("animal")).thenReturn(new Animal("animal", "Animal", "An animal")) ;
+        when(parkRepository.findByURLSlug("yellowstone"))
         .thenReturn(new Park("Yellowstone"));
 
         Point locationOfAnimal = geometryFactory.createPoint(new Coordinate(-110.5885, 44.4279));
@@ -69,11 +69,11 @@ class SightingServiceTest {
         Park park = new Park("Yellowstone");
         park.setAnimals(Set.of(animal));
 
-        when(sightingsRepository.getSightingsByPark(park))
+        when(sightingsRepository.findAllByPark(park))
         .thenReturn(List.of(
             new Sighting(animal, locationOfAnimal, locationOfReport, park)));
 
-        when(parkRepository.findBySlug("yellowstone"))
+        when(parkRepository.findByURLSlug("yellowstone"))
         .thenReturn(park);
 
         SightingMapDTO sightings = sightingService.getSightingsForPark(park.getURLSlug());

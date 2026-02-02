@@ -28,8 +28,8 @@ public class SightingServiceImpl implements SightingService {
     public boolean createSighting(String animalName, Point locationOfAnimal, Point locationOfReport, String parkSlug) {
         boolean isCreated = false;
 
-        Animal animal = animalRepository.findByName(animalName);
-        Park park = parkRepository.findBySlug(parkSlug);
+        Animal animal = animalRepository.findByCommonName(animalName);
+        Park park = parkRepository.findByURLSlug(parkSlug);
         if (animal != null && park != null) {
             Sighting sighting = new Sighting(animal, locationOfAnimal, locationOfReport, park);
             
@@ -45,11 +45,11 @@ public class SightingServiceImpl implements SightingService {
     @Override
     public SightingMapDTO getSightingsForPark(String parkSlug) {
         List<Sighting> sightings;
-        Park park = parkRepository.findBySlug(parkSlug);
+        Park park = parkRepository.findByURLSlug(parkSlug);
         List<AnimalLocationsDTO> animalLocationsDTOs = new ArrayList<>();
 
         if (park != null) {
-        sightings = sightingsRepository.getSightingsByPark(park);
+        sightings = sightingsRepository.findAllByPark(park);
 
             for (Animal animal : park.getAnimals()) {
                 List<Point> animalLocations = sightings.stream()
