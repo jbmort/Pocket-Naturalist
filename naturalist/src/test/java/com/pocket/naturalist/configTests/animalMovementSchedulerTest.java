@@ -8,17 +8,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Point;
 import com.pocket.naturalist.config.animalMovementScheduler;
-// import com.pocket.naturalist.entity.Animal;
 import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.entity.Sighting;
 
-public class animalMovementSchedulerTest {
+class AnimalMovementSchedulerTest {
     List<Sighting> sightings;
     Park park;
 
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
     }
 
     @Test
