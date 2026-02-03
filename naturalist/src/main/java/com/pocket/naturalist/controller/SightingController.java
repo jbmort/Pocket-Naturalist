@@ -43,7 +43,6 @@ public class SightingController {
     public ResponseEntity<Void> createSighting(@PathVariable String parkSlug,
                                                 @RequestBody SightingReportDTO sightingData) 
     {
-        System.out.println("Received sighting report for park: " + parkSlug + " with data: " + sightingData);
         String animalName = sightingData.animalName();
         Point locationOfAnimal = sightingData.locationOfAnimal();
         Point locationOfReport = sightingData.locationOfReport();
