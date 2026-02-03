@@ -19,6 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pocket.naturalist.controller.CheckInController;
 import com.pocket.naturalist.dto.CheckInResponseDTO;
+import com.pocket.naturalist.dto.CheckInResponseFeatureDTO;
 import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.service.LocationService;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -92,5 +93,37 @@ class CheckInControllerTest {
 
     }
 
+    @Test
+    void verifyVicinityOfParkFeature() throws Exception {
+        userLocation = geometryFactory.createPoint(new Coordinate(1.1, 1.2));
+        int featureId = 1;
+        when(locationService.isPointNearFeature(userLocation, park.getURLSlug(), featureId)).thenReturn(true);
+
+        String jsonLocation = objectMapper.writeValueAsString(userLocation);
+        String responseContent = objectMapper.writeValueAsString(new CheckInResponseFeatureDTO(park.getURLSlug(), featureId, true));
+
+        this.mockMvc.perform(post("/checkin/{parkSlug}/feature/{featureId}", park.getURLSlug(), featureId)
+            .content(jsonLocation)
+            .contentType("application/json"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(responseContent));
+
+    }
+
+    @Test
+    void verifyNonVicinityOfParkFeature() throws Exception {
+        userLocation = geometryFactory.createPoint(new Coordinate(5, 5));
+        int featureId = 1;
+        when(locationService.isPointNearFeature(userLocation, park.getURLSlug(), featureId)).thenReturn(false);
+        String jsonLocation = objectMapper.writeValueAsString(userLocation);
+        String responseContent = objectMapper.writeValueAsString(new CheckInResponseFeatureDTO(park.getURLSlug(), featureId, false));
+
+        this.mockMvc.perform(post("/checkin/{parkSlug}/feature/{featureId}", park.getURLSlug(), featureId)
+            .content(jsonLocation)
+            .contentType("application/json"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(responseContent));
+
+    }
     
 }

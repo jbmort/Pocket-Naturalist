@@ -1,5 +1,7 @@
 package com.pocket.naturalist.service;
 
+import org.locationtech.jts.geom.Point;
+
 import com.pocket.naturalist.repository.ParkRepository;
 
 public class LocationServiceImpl implements LocationService {
@@ -11,6 +13,12 @@ public class LocationServiceImpl implements LocationService {
     public boolean isPointInsideParkBoundaries(org.locationtech.jts.geom.Point userLocation, String urlSlug) {
 
         return parkRepository.isPointInParkBoundaries(userLocation, urlSlug);
+    }
+
+
+    @Override
+    public boolean isPointNearFeature(Point userLocation, String urlSlug, int featureId) {
+        return parkRepository.isPointNearFeature(userLocation, urlSlug, featureId);
     }
 
     

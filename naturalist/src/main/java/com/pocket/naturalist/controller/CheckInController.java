@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pocket.naturalist.dto.CheckInResponseDTO;
+import com.pocket.naturalist.dto.CheckInResponseFeatureDTO;
 import com.pocket.naturalist.service.LocationService;
 
 @RestController
@@ -31,5 +32,18 @@ public class CheckInController {
         CheckInResponseDTO responseDTO = new CheckInResponseDTO(parkSlug, isInside);
         return ResponseEntity.ok(responseDTO);
         
+    }
+
+    @PostMapping("/{parkSlug}/feature/{featureId}")
+    public ResponseEntity<CheckInResponseFeatureDTO> checkInFeature(@PathVariable String parkSlug,
+                                                            @PathVariable int featureId,
+                                                            @RequestBody Point location){
+        
+        boolean isNearFeature = locationService.isPointNearFeature(location, parkSlug, featureId);
+
+        CheckInResponseFeatureDTO responseDTO = new CheckInResponseFeatureDTO(parkSlug, featureId, isNearFeature);
+        
+        return ResponseEntity.ok(responseDTO);
+    
     }
 }

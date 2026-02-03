@@ -1,5 +1,6 @@
 package com.pocket.naturalist.repository;
 
+import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -10,7 +11,12 @@ public interface ParkRepository extends JpaRepository<Park, Long> {
 
     @Query("SELECT EXISTS " +
            "(SELECT 1 FROM Park p JOIN p.boundaries b " +
-           "WHERE p.urlSlug = :urlSlug AND ST_Contains(b, :userLocation) )")
+           "WHERE p.URLSlug = :urlSlug AND ST_Contains(b, :userLocation) )")
     public boolean isPointInParkBoundaries(org.locationtech.jts.geom.Point userLocation, String urlSlug);
+
+    @Query("SELECT EXISTS " +
+           "(SELECT 1 FROM Park p JOIN p.features f " +
+           "WHERE p.URLSlug = :urlSlug AND f.id = :featureId AND ST_DWithin(f.location, :userLocation, 0.001) )")
+    public boolean isPointNearFeature(Point userLocation, String urlSlug, int featureId);
     
 }
