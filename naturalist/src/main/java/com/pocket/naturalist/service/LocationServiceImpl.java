@@ -1,9 +1,11 @@
 package com.pocket.naturalist.service;
 
 import org.locationtech.jts.geom.Point;
+import org.springframework.stereotype.Service;
 
 import com.pocket.naturalist.repository.ParkRepository;
 
+@Service
 public class LocationServiceImpl implements LocationService {
 
     ParkRepository parkRepository;

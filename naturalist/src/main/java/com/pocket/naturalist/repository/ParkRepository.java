@@ -9,14 +9,24 @@ import com.pocket.naturalist.entity.Park;
 public interface ParkRepository extends JpaRepository<Park, Long> {
     public Park findByURLSlug(String parkSlug);
 
-    @Query("SELECT EXISTS " +
-           "(SELECT 1 FROM Park p JOIN p.boundaries b " +
-           "WHERE p.URLSlug = :urlSlug AND ST_Contains(b, :userLocation) )")
+    @Query(value =  """
+            SELECT EXISTS (
+            SELECT 1
+            FROM parks p
+            WHERE p.urlslug = :urlSlug AND ST_Contains(p.boundary_list, :userLocation) = true)""", 
+            nativeQuery = true)    
     public boolean isPointInParkBoundaries(org.locationtech.jts.geom.Point userLocation, String urlSlug);
 
-    @Query("SELECT EXISTS " +
-           "(SELECT 1 FROM Park p JOIN p.features f " +
-           "WHERE p.URLSlug = :urlSlug AND f.id = :featureId AND ST_DWithin(f.location, :userLocation, 0.001) )")
+ 
+    @Query(value = """
+            SELECT EXISTS (
+            SELECT 1 
+            FROM parks p, features f 
+            WHERE p.urlslug = :urlSlug 
+            AND f.id = :featureId 
+            AND ST_DWithin(f.location, :userLocation, 0.001)
+        )
+        """, nativeQuery = true)
     public boolean isPointNearFeature(Point userLocation, String urlSlug, int featureId);
     
 }
