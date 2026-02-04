@@ -23,7 +23,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.Module;
 import com.pocket.naturalist.controller.SightingController;
 import com.pocket.naturalist.dto.AnimalLocationsDTO;
 import com.pocket.naturalist.dto.SightingMapDTO;
@@ -50,7 +49,7 @@ class SightingControllerTest {
 	private MockMvc mockMvc;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         geometryFactory = new GeometryFactory();
         animal = new Animal("Bison bison", "Bison", "Large herbivorous mammal native to North America.");
         locationOfAnimal = geometryFactory.createPoint(new Coordinate(-110.5885, 44.4279));
@@ -61,7 +60,7 @@ class SightingControllerTest {
 
 
     @Test
-    public void getRequestShouldReturnSightingDtoList() throws Exception {
+    void getRequestShouldReturnSightingDtoList() throws Exception {
         String parkSlug = park.getURLSlug();
 
         when(sightingService.getSightingsForPark(parkSlug))
@@ -89,7 +88,7 @@ class SightingControllerTest {
     }
 
     @Test
-    public void shouldReturn400ForInvalidParkSlug() throws Exception {
+    void shouldReturn400ForInvalidParkSlug() throws Exception {
         String invalidParkSlug = "invalid/park";
 
         this.mockMvc.perform(get("/sightings/" + invalidParkSlug))
@@ -106,6 +105,7 @@ class SightingControllerTest {
             locationOfAnimal
         );
 
+        @SuppressWarnings("removal")
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new JtsModule());
         String sightingJson = objectMapper.writeValueAsString(sightingReportDTO);
         System.out.println("Sighting Report DTO: " + sightingReportDTO.toString());

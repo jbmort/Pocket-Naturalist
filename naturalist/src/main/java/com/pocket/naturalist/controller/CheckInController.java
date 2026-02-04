@@ -1,7 +1,6 @@
 package com.pocket.naturalist.controller;
 
 import org.locationtech.jts.geom.Point;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +16,11 @@ import com.pocket.naturalist.service.LocationService;
 @RequestMapping("/checkin")
 public class CheckInController {
 
-    @Autowired
     LocationService locationService;
+
+    public CheckInController(LocationService locationService){
+        this.locationService = locationService;
+    }
 
 
     @PostMapping("/{parkSlug}")

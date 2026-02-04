@@ -1,10 +1,8 @@
 package com.pocket.naturalist.controller;
 
-import org.apache.catalina.core.ApplicationContext;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,10 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pocket.naturalist.dto.AnimalLocationsDTO;
 import com.pocket.naturalist.dto.SightingMapDTO;
 import com.pocket.naturalist.dto.SightingReportDTO;
-import com.pocket.naturalist.entity.Sighting;
 import com.pocket.naturalist.service.SightingService;
 
 @RestController
@@ -29,12 +25,10 @@ public class SightingController {
     }
 
     @GetMapping("/{parkSlug}")
-    public ResponseEntity<SightingMapDTO> getSightingsForPark(@PathVariable String parkSlug) {
-        System.out.println("Received request for sightings in park: " + parkSlug);
+    public ResponseEntity<SightingMapDTO> getSightingsForPark(@PathVariable String parkSlug
+    ) {
 
         SightingMapDTO sightings = sightingService.getSightingsForPark(parkSlug);
-
-        System.out.println("Returning " + sightings + " sightings for park: " + parkSlug);
 
         return ResponseEntity.ok(sightings);
     }
