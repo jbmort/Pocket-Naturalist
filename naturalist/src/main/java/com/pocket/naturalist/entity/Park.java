@@ -30,7 +30,7 @@ public class Park {
     String name;
 
     @Column(nullable = false, unique = true)
-    String URLSlug;
+    String urlSlug;
 
     @Column(columnDefinition = "geometry(Polygon, 4326)")
     List<Polygon> boundaryList;
@@ -51,12 +51,12 @@ public class Park {
 
     public Park(String name) {
         this.name = name;
-        this.URLSlug = createSlug(name);
+        this.urlSlug = createSlug(name);
     }
 
    public Park(String name, List<Polygon> boundaries, Point mapCenter) {
          this.name = name;
-         this.URLSlug = createSlug(name);
+         this.urlSlug = createSlug(name);
          this.boundaryList = boundaries;
          this.mapCenter = mapCenter;
    }
@@ -85,12 +85,12 @@ public class Park {
         this.name = name;
     }
 
-    public String getURLSlug() {
-        return URLSlug;
+    public String getUrlSlug() {
+        return urlSlug;
     }
 
-    public void setURLSlug(String uRLSlug) {
-        URLSlug = uRLSlug;
+    public void setUrlSlug(String uRLSlug) {
+        urlSlug = uRLSlug;
     }
 
     public List<Polygon> getBoundaryList() {

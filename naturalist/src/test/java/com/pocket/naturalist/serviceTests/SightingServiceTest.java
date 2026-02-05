@@ -76,7 +76,7 @@ class SightingServiceTest {
         when(parkRepository.findByURLSlug("yellowstone"))
         .thenReturn(park);
 
-        SightingMapDTO sightings = sightingService.getSightingsForPark(park.getURLSlug());
+        SightingMapDTO sightings = sightingService.getSightingsForPark(park.getUrlSlug());
 
         assertNotNull(sightings);
         assertEquals(1, sightings.animalLocations().size());

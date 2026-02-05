@@ -138,4 +138,22 @@ public class User {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public List<UserParkStat> getUserParkStats() {
+        return userParkStats;
+    }
+
+    public void setUserParkStats(List<UserParkStat> userParkStats) {
+        this.userParkStats = userParkStats;
+    }
+
+    public List<Badge> getBadges() {
+        return badges;
+    }
+
+    public void setBadges(List<Badge> badges) {
+        this.badges = badges;
+    }
+
+    
 }

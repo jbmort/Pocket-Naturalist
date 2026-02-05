@@ -32,13 +32,13 @@ class ParkTest {
     void constructor_setsNameAndSlug() {
         Park park = new Park("Yellowstone National Park");
         assertEquals("Yellowstone National Park", park.getName());
-        assertEquals("yellowstone-national-park", park.getURLSlug());
+        assertEquals("yellowstone-national-park", park.getUrlSlug());
     }
 
     @Test
     void constructor_emptyName_setsDefaultSlug() {
         Park park = new Park("");
-        assertEquals("General-Park", park.getURLSlug());
+        assertEquals("General-Park", park.getUrlSlug());
     }
 
     @Test
@@ -58,8 +58,8 @@ class ParkTest {
     @Test
     void setAndGetURLSlug() {
         Park park = new Park("Test Park");
-        park.setURLSlug("custom-slug");
-        assertEquals("custom-slug", park.getURLSlug());
+        park.setUrlSlug("custom-slug");
+        assertEquals("custom-slug", park.getUrlSlug());
     }
 
     @Test
@@ -107,6 +107,6 @@ class ParkTest {
     @Test
     void slugRemovesSpecialCharactersAndSpaces() {
         Park park = new Park("Test! Park's @ National #1");
-        assertEquals("test-parks-national-1", park.getURLSlug());
+        assertEquals("test-parks-national-1", park.getUrlSlug());
     }
 }

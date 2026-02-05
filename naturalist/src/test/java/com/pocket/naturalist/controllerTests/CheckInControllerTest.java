@@ -44,6 +44,7 @@ class CheckInControllerTest {
     @Autowired
     WebApplicationContext webApplicationContext;
 
+    @SuppressWarnings("removal")
     @BeforeEach
     void setUp() {
         geometryFactory = new GeometryFactory();
@@ -65,11 +66,11 @@ class CheckInControllerTest {
     @Test
     void checkInShouldReturnPositiveWhenUserInsideParkBoundary() throws Exception {
         userLocation = geometryFactory.createPoint(new Coordinate(1, 1));
-        when(locationService.isPointInsideParkBoundaries(userLocation, park.getURLSlug())).thenReturn(true);
+        when(locationService.isPointInsideParkBoundaries(userLocation, park.getUrlSlug())).thenReturn(true);
 
         String jsonLocation = objectMapper.writeValueAsString(userLocation);
-        String responseContent = objectMapper.writeValueAsString(new CheckInResponseDTO(park.getURLSlug(), true));
-        this.mockMvc.perform(post("/checkin/{parkSlug}", park.getURLSlug())
+        String responseContent = objectMapper.writeValueAsString(new CheckInResponseDTO(park.getUrlSlug(), true));
+        this.mockMvc.perform(post("/checkin/{parkSlug}", park.getUrlSlug())
             .content(jsonLocation)
             .contentType("application/json"))
             .andExpect(status().isOk())
@@ -80,12 +81,12 @@ class CheckInControllerTest {
     @Test
     void checkInShouldReturnNegativeWhenUserOutsideParkBoundary() throws Exception {
         userLocation = geometryFactory.createPoint(new Coordinate(3, 3));
-        when(locationService.isPointInsideParkBoundaries(userLocation, park.getURLSlug())).thenReturn(false);
+        when(locationService.isPointInsideParkBoundaries(userLocation, park.getUrlSlug())).thenReturn(false);
 
         String jsonLocation = objectMapper.writeValueAsString(userLocation);
-        String responseContent = objectMapper.writeValueAsString(new CheckInResponseDTO(park.getURLSlug(), false));
+        String responseContent = objectMapper.writeValueAsString(new CheckInResponseDTO(park.getUrlSlug(), false));
 
-        this.mockMvc.perform(post("/checkin/{parkSlug}", park.getURLSlug())
+        this.mockMvc.perform(post("/checkin/{parkSlug}", park.getUrlSlug())
             .content(jsonLocation)
             .contentType("application/json"))
             .andExpect(status().isOk())
@@ -97,12 +98,12 @@ class CheckInControllerTest {
     void verifyVicinityOfParkFeature() throws Exception {
         userLocation = geometryFactory.createPoint(new Coordinate(1.1, 1.2));
         int featureId = 1;
-        when(locationService.isPointNearFeature(userLocation, park.getURLSlug(), featureId)).thenReturn(true);
+        when(locationService.isPointNearFeature(userLocation, park.getUrlSlug(), featureId)).thenReturn(true);
 
         String jsonLocation = objectMapper.writeValueAsString(userLocation);
-        String responseContent = objectMapper.writeValueAsString(new CheckInResponseFeatureDTO(park.getURLSlug(), featureId, true));
+        String responseContent = objectMapper.writeValueAsString(new CheckInResponseFeatureDTO(park.getUrlSlug(), featureId, true));
 
-        this.mockMvc.perform(post("/checkin/{parkSlug}/feature/{featureId}", park.getURLSlug(), featureId)
+        this.mockMvc.perform(post("/checkin/{parkSlug}/feature/{featureId}", park.getUrlSlug(), featureId)
             .content(jsonLocation)
             .contentType("application/json"))
             .andExpect(status().isOk())
@@ -114,11 +115,11 @@ class CheckInControllerTest {
     void verifyNonVicinityOfParkFeature() throws Exception {
         userLocation = geometryFactory.createPoint(new Coordinate(5, 5));
         int featureId = 1;
-        when(locationService.isPointNearFeature(userLocation, park.getURLSlug(), featureId)).thenReturn(false);
+        when(locationService.isPointNearFeature(userLocation, park.getUrlSlug(), featureId)).thenReturn(false);
         String jsonLocation = objectMapper.writeValueAsString(userLocation);
-        String responseContent = objectMapper.writeValueAsString(new CheckInResponseFeatureDTO(park.getURLSlug(), featureId, false));
+        String responseContent = objectMapper.writeValueAsString(new CheckInResponseFeatureDTO(park.getUrlSlug(), featureId, false));
 
-        this.mockMvc.perform(post("/checkin/{parkSlug}/feature/{featureId}", park.getURLSlug(), featureId)
+        this.mockMvc.perform(post("/checkin/{parkSlug}/feature/{featureId}", park.getUrlSlug(), featureId)
             .content(jsonLocation)
             .contentType("application/json"))
             .andExpect(status().isOk())

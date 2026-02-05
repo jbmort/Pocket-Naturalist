@@ -61,7 +61,7 @@ class SightingControllerTest {
 
     @Test
     void getRequestShouldReturnSightingDtoList() throws Exception {
-        String parkSlug = park.getURLSlug();
+        String parkSlug = park.getUrlSlug();
 
         when(sightingService.getSightingsForPark(parkSlug))
         .thenReturn(new SightingMapDTO(parkSlug, List.of(new AnimalLocationsDTO(animal.getCommonName(), List.of(locationOfAnimal)))));
@@ -97,7 +97,7 @@ class SightingControllerTest {
 
     @Test
     void shouldAllowCreationOfSighting() throws Exception {
-        String parkSlug = park.getURLSlug();
+        String parkSlug = park.getUrlSlug();
         String animalName = "Bison";
         SightingReportDTO sightingReportDTO = new SightingReportDTO(
             animalName,
