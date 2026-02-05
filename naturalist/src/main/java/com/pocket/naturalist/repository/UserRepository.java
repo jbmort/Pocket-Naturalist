@@ -6,5 +6,7 @@ import com.pocket.naturalist.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    User findByUsername(String string);
+
 
 }

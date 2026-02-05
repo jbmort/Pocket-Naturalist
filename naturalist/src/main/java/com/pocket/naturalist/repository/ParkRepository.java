@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.pocket.naturalist.entity.Park;
 
 public interface ParkRepository extends JpaRepository<Park, Long> {
-    public Park findByURLSlug(String parkSlug);
+    public Park findByUrlSlug(String parkSlug);
 
     @Query(value =  """
             SELECT EXISTS (
