@@ -143,6 +143,10 @@ public class User {
         return userParkStats;
     }
 
+    public void addUserParkStat(UserParkStat stat){
+        this.userParkStats.add(stat);
+    }
+
     public void setUserParkStats(List<UserParkStat> userParkStats) {
         this.userParkStats = userParkStats;
     }
