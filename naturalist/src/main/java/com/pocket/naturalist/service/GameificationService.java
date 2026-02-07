@@ -6,5 +6,7 @@ import org.springframework.stereotype.Service;
 public interface GameificationService {
 
     void addCheckInPointsForUser(long userId, String parkSlug);
+
+    void awardFeaturePoints(long userId, String parkSlug, long featureId);
     
 }

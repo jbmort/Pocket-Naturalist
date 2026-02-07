@@ -3,6 +3,7 @@ package com.pocket.naturalist.entity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -157,6 +158,15 @@ public class User {
 
     public void setBadges(List<Badge> badges) {
         this.badges = badges;
+    }
+
+    public Optional<UserParkStat> getParkStat(String parkSlug){
+        if(!this.userParkStats.isEmpty()){
+            return Optional.of(this.userParkStats.stream()
+                              .filter(s -> s.getPark().getUrlSlug().equals(parkSlug))
+                              .toList().getFirst());
+        }
+        return Optional.empty();
     }
 
     

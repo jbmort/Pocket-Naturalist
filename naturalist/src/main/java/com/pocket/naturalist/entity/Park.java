@@ -69,6 +69,8 @@ public class Park {
         return slug;
     }
 
+    
+
     public long getId() {
         return id;
     }
@@ -130,5 +132,17 @@ public class Park {
 
     public void setAnimals(Set<Animal> animals) {
         this.animals = animals;
+    }
+
+    public List<Feature> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(List<Feature> features) {
+        this.features = features;
+    }
+
+    public void addFeature(Feature feature){
+        this.features.add(feature);
     }
 }

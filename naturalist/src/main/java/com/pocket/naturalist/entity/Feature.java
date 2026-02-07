@@ -30,7 +30,7 @@ public class Feature {
     @Column(columnDefinition = "geometry(Point, 4326)", nullable = false)
     Point location;
 
-    @Column(nullable = false, columnDefinition = "integer default 0")
+    @Column(nullable = false, columnDefinition = "integer default 1")
     int pointValue;
 
     @ManyToOne(fetch = FetchType.LAZY)
