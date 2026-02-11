@@ -18,7 +18,6 @@ import org.locationtech.jts.geom.Point;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.repository.CrudRepository;
 
 import com.pocket.naturalist.entity.Feature;
 import com.pocket.naturalist.entity.Park;

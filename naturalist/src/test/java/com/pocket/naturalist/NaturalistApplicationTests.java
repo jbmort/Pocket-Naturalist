@@ -1,26 +1,26 @@
 package com.pocket.naturalist;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.pocket.naturalist.repository.AnimalRepository;
 import com.pocket.naturalist.repository.ParkRepository;
 import com.pocket.naturalist.repository.SightingsRepository;
 import com.pocket.naturalist.repository.UserRepository;
-import com.pocket.naturalist.serviceTests.MockBean;
 
 @SpringBootTest
 class NaturalistApplicationTests {
-	 @MockBean
+	 @Mock
     private AnimalRepository animalRepository;
 
-    @MockBean
+    @Mock
     private ParkRepository parkRepository;
 
-    @MockBean
+    @Mock
     private SightingsRepository sightingsRepository;
 
-	@MockBean
+	@Mock
 	private UserRepository userRepository;
 	
 
