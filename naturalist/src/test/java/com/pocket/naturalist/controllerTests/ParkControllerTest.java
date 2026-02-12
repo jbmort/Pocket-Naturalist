@@ -1,6 +1,5 @@
 package com.pocket.naturalist.controllerTests;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -8,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Polygon;
-import org.mockito.Mock;
 import org.n52.jackson2.datatype.jts.JtsModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -22,7 +20,6 @@ import java.util.Set;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pocket.naturalist.controller.ParkController;
-import com.pocket.naturalist.dto.CheckInResponseDTO;
 import com.pocket.naturalist.dto.ParkDataDTO;
 import com.pocket.naturalist.entity.Animal;
 import com.pocket.naturalist.entity.Park;
@@ -64,6 +61,7 @@ class ParkControllerTest {
         this.objectMapper = new ObjectMapper().registerModule(new JtsModule());
     }
 
+    // main method to retrieve starter park data to populate map on the front end. 
     @Test
     void shouldReturnFullParkData() throws Exception{
 
@@ -73,7 +71,6 @@ class ParkControllerTest {
         this.mockMvc.perform(get("/park/{parkId}", park.getUrlSlug()))
             .andExpect(status().isOk())
             .andExpect(content().string(responseContent));
-
     }
     
 }
