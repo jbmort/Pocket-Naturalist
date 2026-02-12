@@ -1,5 +1,6 @@
 package com.pocket.naturalist.controllerTests;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -65,12 +66,14 @@ class ParkControllerTest {
     @Test
     void shouldReturnFullParkData() throws Exception{
 
+
         ParkDataDTO parkDataDto = new ParkDataDTO(park.getName(), park.getBoundaryList(), park.getFeatures(), park.getAnimals());
         String responseContent = objectMapper.writeValueAsString(parkDataDto);
+        when(parkService.getMainPageParkData(park.getUrlSlug())).thenReturn(parkDataDto);
 
         this.mockMvc.perform(get("/park/{parkId}", park.getUrlSlug()))
             .andExpect(status().isOk())
-            .andExpect(content().string(responseContent));
+            .andExpect(content().json(responseContent));
     }
     
 }
