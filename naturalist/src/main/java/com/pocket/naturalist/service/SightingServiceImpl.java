@@ -3,6 +3,7 @@ package com.pocket.naturalist.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
@@ -29,27 +30,27 @@ public class SightingServiceImpl implements SightingService {
         boolean isCreated = false;
 
         Animal animal = animalRepository.findByCommonName(animalName);
-        Park park = parkRepository.findByUrlSlug(parkSlug);
-        if (animal != null && park != null) {
-            Sighting sighting = new Sighting(animal, locationOfAnimal, locationOfReport, park);
+        Optional<Park> optionalPark = parkRepository.findByUrlSlug(parkSlug);
+        if (animal != null && optionalPark.isPresent()) {
+            Sighting sighting = new Sighting(animal, locationOfAnimal, locationOfReport, optionalPark.orElseThrow());
             
 
             sightingsRepository.save(sighting);
             isCreated = true;
         }
-
-
         return isCreated;
     }
 
     @Override
     public SightingMapDTO getSightingsForPark(String parkSlug) {
         List<Sighting> sightings;
-        Park park = parkRepository.findByUrlSlug(parkSlug);
+        Optional<Park> optionalPark = parkRepository.findByUrlSlug(parkSlug);
         List<AnimalLocationsDTO> animalLocationsDTOs = new ArrayList<>();
 
-        if (park != null) {
-        sightings = sightingsRepository.findAllByPark(park);
+        if (optionalPark.isPresent()) {
+
+            Park park = optionalPark.orElseThrow();
+            sightings = sightingsRepository.findAllByPark(park);
 
             for (Animal animal : park.getAnimals()) {
                 List<Point> animalLocations = sightings.stream()
@@ -61,8 +62,9 @@ public class SightingServiceImpl implements SightingService {
                 animalLocationsDTOs.add(animalLocationsDTO);
             }
         }
-
         return new SightingMapDTO(parkSlug, animalLocationsDTOs);
+
+
     }
     
 }

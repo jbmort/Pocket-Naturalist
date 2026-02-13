@@ -1,5 +1,7 @@
 package com.pocket.naturalist.repository;
 
+import java.util.Optional;
+
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -7,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.pocket.naturalist.entity.Park;
 
 public interface ParkRepository extends JpaRepository<Park, Long> {
-    public Park findByUrlSlug(String parkSlug);
+    public Optional<Park> findByUrlSlug(String parkSlug);
 
     @Query(value =  """
             SELECT EXISTS (

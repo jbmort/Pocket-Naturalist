@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -50,42 +51,51 @@ public class GameificationServiceImpl implements GameificationService{
     public void addCheckInPointsForUser(long userId, String parkSlug) {
         Optional<User> user = userRepository.findById(userId);
 
-        Park park = parkRepository.findByUrlSlug(parkSlug);
+        Optional<Park> optionalPark = parkRepository.findByUrlSlug(parkSlug);
 
-        if(user.isPresent()){
-            User currentUser = user.orElseThrow();
+        if(optionalPark.isPresent()){
+            Park park = optionalPark.get();
+        
+            if(user.isPresent()){
+                User currentUser = user.orElseThrow();
 
-            List<UserParkStat> currentStats = currentUser.getUserParkStats();
+                List<UserParkStat> currentStats = currentUser.getUserParkStats();
 
-            boolean alreadyVisited = currentUser.getParkStat(parkSlug).isPresent();
+                boolean alreadyVisited = currentUser.getParkStat(parkSlug).isPresent();
 
-            UserParkStat currentStat;
+                UserParkStat currentStat;
 
-            if(alreadyVisited){
-                //Ensures last check in was the previous day to prevent multiple check ins per day
-                currentStat = currentUser.getParkStat(parkSlug).orElseThrow();
-                if (currentStat.getLastVisited().toLocalDate().isAfter(LocalDateTime.now().toLocalDate()) ) {
-                    currentStat.addPoints(CHECK_IN_POINTS);
-                    List<UserParkStat> newStats = currentStats.stream().filter(s -> !s.getPark().equals(park)).collect(Collectors.toCollection(ArrayList::new));
-                    newStats.add(currentStat);
-                    currentUser.setUserParkStats(newStats);
+                if(alreadyVisited){
+                    //Ensures last check in was the previous day to prevent multiple check ins per day
+                    currentStat = currentUser.getParkStat(parkSlug).orElseThrow();
+                    if (currentStat.getLastVisited().toLocalDate().isAfter(LocalDateTime.now().toLocalDate()) ) {
+                        currentStat.addPoints(CHECK_IN_POINTS);
+                        List<UserParkStat> newStats = currentStats.stream()
+                                                                    .filter(s -> !s.getPark().equals(park))
+                                                                    .collect(Collectors.toCollection(ArrayList::new));
+                        newStats.add(currentStat);
+                        currentUser.setUserParkStats(newStats);
+                    }
+                    else {return;}
                 }
-                else {return;}
+                // creates a new stat for the first time visiting a park
+                else{
+                    currentStat = new UserParkStat(currentUser, park);
+                    currentStat.addPoints(CHECK_IN_POINTS);
+                    currentStat.setLastVisited(LocalDateTime.now());
+                    currentUser.addUserParkStat(currentStat);
+
+                }
+
+                userParkStatRepository.save(currentStat);
+                userRepository.save(currentUser);
             }
-            // creates a new stat for the first time visiting a park
             else{
-                currentStat = new UserParkStat(currentUser, park);
-                currentStat.addPoints(CHECK_IN_POINTS);
-                currentStat.setLastVisited(LocalDateTime.now());
-                currentUser.addUserParkStat(currentStat);
-
+                logger.info("User not found");
             }
-
-            userParkStatRepository.save(currentStat);
-            userRepository.save(currentUser);
         }
         else{
-            logger.info("User not found");
+            logger.log(Level.INFO,"No park found for {}", parkSlug);
         }
     }
 

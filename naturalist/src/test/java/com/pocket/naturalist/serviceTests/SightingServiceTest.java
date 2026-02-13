@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,7 @@ class SightingServiceTest {
     void testCreateSighting() {
         when(animalRepository.findByCommonName("animal")).thenReturn(new Animal("animal", "Animal", "An animal")) ;
         when(parkRepository.findByUrlSlug("yellowstone"))
-        .thenReturn(new Park("Yellowstone"));
+        .thenReturn(Optional.of(new Park("Yellowstone")));
 
         Point locationOfAnimal = geometryFactory.createPoint(new Coordinate(-110.5885, 44.4279));
         Point locationOfReport = geometryFactory.createPoint(new Coordinate(-110.5880, 44.4280));
@@ -74,7 +75,7 @@ class SightingServiceTest {
             new Sighting(animal, locationOfAnimal, locationOfReport, park)));
 
         when(parkRepository.findByUrlSlug("yellowstone"))
-        .thenReturn(park);
+        .thenReturn(Optional.of(park));
 
         SightingMapDTO sightings = sightingService.getSightingsForPark(park.getUrlSlug());
 
