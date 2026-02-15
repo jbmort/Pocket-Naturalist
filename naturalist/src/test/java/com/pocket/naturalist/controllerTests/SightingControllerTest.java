@@ -68,7 +68,7 @@ class SightingControllerTest {
 
         this.mockMvc.perform(get("/sightings/" + parkSlug))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.park").value(parkSlug))
+            .andExpect(jsonPath("$.parkSlug").value(parkSlug))
             .andExpect(jsonPath("$.animalLocations").isArray());
 
     }
@@ -82,7 +82,7 @@ class SightingControllerTest {
 
         this.mockMvc.perform(get("/sightings/" + unknownParkSlug))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.park").value(unknownParkSlug))
+            .andExpect(jsonPath("$.parkSlug").value(unknownParkSlug))
             .andExpect(jsonPath("$.animalLocations").isArray())
             .andExpect(jsonPath("$.animalLocations").isEmpty());
     }
