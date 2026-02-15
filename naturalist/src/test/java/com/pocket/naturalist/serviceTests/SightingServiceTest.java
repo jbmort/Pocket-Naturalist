@@ -82,7 +82,7 @@ class SightingServiceTest {
         assertNotNull(sightings);
         assertEquals(1, sightings.animalLocations().size());
         assertEquals(1, sightings.animalLocations().get(0).locations().size());
-        assertEquals("yellowstone", sightings.park());
+        assertEquals("yellowstone", sightings.parkSlug());
     }
 
 }

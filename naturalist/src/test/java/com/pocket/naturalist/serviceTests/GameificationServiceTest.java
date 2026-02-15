@@ -115,4 +115,6 @@ class GameificationServiceTest {
         assertEquals(2, points);
         assertNotNull(lastVisit);
     }
+
+    
 }
