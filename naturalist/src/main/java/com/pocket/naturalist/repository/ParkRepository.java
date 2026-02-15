@@ -11,6 +11,14 @@ import com.pocket.naturalist.entity.Park;
 public interface ParkRepository extends JpaRepository<Park, Long> {
     public Optional<Park> findByUrlSlug(String parkSlug);
 
+
+    /**
+     * Checks if the users location is within the park boundary
+     * @param userLocation
+     * @param urlSlug
+     * 
+     * @return boolean
+    */
     @Query(value =  """
             SELECT EXISTS (
             SELECT 1
@@ -20,6 +28,14 @@ public interface ParkRepository extends JpaRepository<Park, Long> {
     public boolean isPointInParkBoundaries(org.locationtech.jts.geom.Point userLocation, String urlSlug);
 
  
+    /**
+     * checks if the user is close enough to a feature to interact with it
+     * @param userLocation
+     * @param urlSlug
+     * @param featureId
+     * 
+     * @return boolean
+    */
     @Query(value = """
             SELECT EXISTS (
             SELECT 1 

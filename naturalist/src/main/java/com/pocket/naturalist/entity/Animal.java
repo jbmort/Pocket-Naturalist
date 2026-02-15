@@ -29,7 +29,6 @@ public class Animal {
     @ManyToMany(mappedBy = "animals", fetch = FetchType.LAZY)
     Set<Park> parks = new HashSet<>();
 
-
     public Animal(String scientificName, String commonName, String description) {
         this.scientificName = scientificName;
         this.commonName = commonName;

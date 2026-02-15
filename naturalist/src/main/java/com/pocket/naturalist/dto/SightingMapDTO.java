@@ -2,6 +2,10 @@ package com.pocket.naturalist.dto;
 
 import java.util.List;
 
-public record SightingMapDTO(String park, List<AnimalLocationsDTO> animalLocations) {
+/**
+ * @param parkSlug
+ * @param animalLocations
+ */
+public record SightingMapDTO(String parkSlug, List<AnimalLocationsDTO> animalLocations) {
     
 }
