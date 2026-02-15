@@ -25,6 +25,15 @@ public class SightingServiceImpl implements SightingService {
     ParkRepository parkRepository;
     SightingsRepository sightingsRepository;
 
+    /**
+     * Logs a user sighting for a specific animal at a park
+     * @param animalName
+     * @param locationOfAnimal
+     * @param locationOfReport
+     * @param parkSlug
+     * 
+     * @return true if sighting is created
+     */
     @Override
     public boolean createSighting(String animalName, Point locationOfAnimal, Point locationOfReport, String parkSlug) {
         boolean isCreated = false;
@@ -41,6 +50,13 @@ public class SightingServiceImpl implements SightingService {
         return isCreated;
     }
 
+    /**
+     * Retrieves all animal sightings at the park
+     * @param parkSlug
+     * @return SightingMapDTO
+     * 
+     * @apiNote currently returns all sightings but will eventually limit it to a certain amount or only the most recent
+     */
     @Override
     public SightingMapDTO getSightingsForPark(String parkSlug) {
         List<Sighting> sightings;

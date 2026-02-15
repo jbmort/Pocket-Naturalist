@@ -47,6 +47,11 @@ public class GameificationServiceImpl implements GameificationService{
     // ADD 
     // include checks for badge achievement
 
+    /**
+     * Adds points for the user for checking in at a park if they have not visited yet that day
+     * @param userId
+     * @param parkSlug
+     */
     @Override
     public void addCheckInPointsForUser(long userId, String parkSlug) {
         Optional<User> user = userRepository.findById(userId);
@@ -99,6 +104,13 @@ public class GameificationServiceImpl implements GameificationService{
         }
     }
 
+    /**
+     * Awards the appropriate amount of points to the user based on the point value 
+     * of the feature they have interacted with
+     * @param userId
+     * @param parkSlug
+     * @param featureId
+     */
     public void awardFeaturePoints(long userId, String parkSlug, long featureId) {
 
         User user = userRepository.findById(userId).orElseThrow();

@@ -17,6 +17,11 @@ public class ParkServiceImpl implements ParkService{
         this.parkRepository = parkRepository;
     }
 
+    /**
+     * Retrieves basic data needed to load the parks main page when a user first visits
+     * @param parkSlug
+     * @return ParkDataDTO
+     */
     @Override
     public ParkDataDTO getMainPageParkData(String parkSlug) {
         Optional<Park> optionalPark = parkRepository.findByUrlSlug(parkSlug);
