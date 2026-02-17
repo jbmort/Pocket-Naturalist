@@ -51,7 +51,7 @@ public class User {
     private List<Badge> badges = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private Role role = Role.ROLE_USER;
     
     @Enumerated(EnumType.STRING)
     private OAuthProvider provider = OAuthProvider.LOCAL;
