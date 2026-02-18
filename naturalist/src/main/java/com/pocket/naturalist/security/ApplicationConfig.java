@@ -34,7 +34,7 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByUsername(username)
-                                            .map(this::createNewUserDetailUser)
+                                            .map(SecurityUser::new)
                                             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
                 
     }
@@ -42,7 +42,6 @@ public class ApplicationConfig {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService());
-        // authProvider. setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
@@ -55,11 +54,5 @@ public class ApplicationConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    private User createNewUserDetailUser(com.pocket.naturalist.entity.User userEntity){
-        Collection<GrantedAuthority> roles = new ArrayList<>();
-        roles.add(new SimpleGrantedAuthority(userEntity.getRole().toString()));
-        return new User(userEntity.getUsername(), userEntity.getPassword(), roles);
     }
 }
