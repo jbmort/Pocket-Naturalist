@@ -20,7 +20,7 @@ public class ParkSecurity {
         
         // Find the user from DB (to get latest Managed Parks list)
         return userRepository.findByUsername(userName).stream()
-                            .filter(user -> user.getRole() == Role.ROLE_ADMIN)
+                            .filter(user -> user.getRole() == Role.ADMIN)
                             .flatMap(user -> user.getManagedParks().stream())
                             .anyMatch(park -> park.getUrlSlug().equals(parkSlug));
     }

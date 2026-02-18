@@ -1,7 +1,6 @@
 package com.pocket.naturalist.controller;
 
 import org.locationtech.jts.geom.Point;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +18,6 @@ import com.pocket.naturalist.service.SightingService;
 public class SightingController {
     private final SightingService sightingService;
 
-    @Autowired
     public SightingController(SightingService sightingService) {
         this.sightingService = sightingService;
     }

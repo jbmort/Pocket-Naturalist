@@ -9,6 +9,6 @@ public interface ParkService {
 
     ParkDataDTO getMainPageParkData(String parkSlug);
 
-    Object getAdminParkData(String parkSlug);
+    ParkDataDTO getAdminParkData(String parkSlug);
     
 }

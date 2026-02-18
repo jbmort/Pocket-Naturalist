@@ -1,7 +1,6 @@
 package com.pocket.naturalist.service;
 
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import com.pocket.naturalist.dto.ParkDataDTO;
@@ -33,6 +32,18 @@ public class ParkServiceImpl implements ParkService{
         else{
             return null;
         }
+    }
+
+    @Override
+    public ParkDataDTO getAdminParkData(String parkSlug) {
+        Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow();
+
+        return new ParkDataDTO(
+                                park.getName(), 
+                                park.getBoundaryList(), 
+                                park.getFeatures(),  
+                                park.getAnimals()
+                            );
     }
     
 }

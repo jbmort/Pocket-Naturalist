@@ -37,10 +37,10 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**", "/park/**").permitAll()
 
                 // 2. USER ROUTES (Record sightings and checkin)
-                .requestMatchers("/sightings/**", "/checkin/**").hasAnyRole("ROLE_ADMIN", "ROLE_USER")
+                .requestMatchers("/sightings/**", "/checkin/**").hasAnyRole("ADMIN", "USER")
                 
                 // 3. ADMIN ROUTES (Broad protection)
-                .requestMatchers("/admin/**").hasRole("ROLE_ADMIN")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 
                 // 4. USER ROUTES (Check-ins, Sightings)
                 .anyRequest().authenticated()
