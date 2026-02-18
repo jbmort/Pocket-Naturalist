@@ -16,13 +16,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -58,9 +56,12 @@ public class User {
 
     private String providerId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "managed_park_id")
-    private Park managedPark;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+                name = "park_managers",
+                joinColumns = @JoinColumn(name = "user_id"),
+                inverseJoinColumns = @JoinColumn(name = "park_id") )
+    private List<Park> managedParks = new ArrayList<>();
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -116,13 +117,7 @@ public class User {
         this.providerId = providerId;
     }
 
-    public Park getManagedPark() {
-        return managedPark;
-    }
-
-    public void setManagedPark(Park managedPark) {
-        this.managedPark = managedPark;
-    }
+  
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -167,6 +162,18 @@ public class User {
                               .toList().getFirst());
         }
         return Optional.empty();
+    }
+
+    public List<Park> getManagedParks() {
+        return managedParks;
+    }
+
+    public void setManagedParks(List<Park> managedParks) {
+        this.managedParks = managedParks;
+    }
+
+    public void addManagedPark(Park park){
+        this.managedParks.add(park);
     }
 
     
