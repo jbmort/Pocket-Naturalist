@@ -8,5 +8,7 @@ import com.pocket.naturalist.dto.ParkDataDTO;
 public interface ParkService {
 
     ParkDataDTO getMainPageParkData(String parkSlug);
+
+    Object getAdminParkData(String parkSlug);
     
 }
