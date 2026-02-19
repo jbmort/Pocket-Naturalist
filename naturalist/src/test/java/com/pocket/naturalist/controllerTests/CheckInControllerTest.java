@@ -21,6 +21,9 @@ import com.pocket.naturalist.controller.CheckInController;
 import com.pocket.naturalist.dto.CheckInResponseDTO;
 import com.pocket.naturalist.dto.CheckInResponseFeatureDTO;
 import com.pocket.naturalist.entity.Park;
+import com.pocket.naturalist.repository.UserRepository;
+import com.pocket.naturalist.security.JwtService;
+import com.pocket.naturalist.security.ParkSecurity;
 import com.pocket.naturalist.service.LocationService;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -34,6 +37,16 @@ class CheckInControllerTest {
 
     GeometryFactory geometryFactory;
     ObjectMapper objectMapper;
+
+    @MockitoBean
+    private JwtService jwtService;
+
+    @MockitoBean(name = "parkSecurity") 
+    private ParkSecurity parkSecurity;
+
+    
+    @MockitoBean
+    private UserRepository userRepository; 
 
     @MockitoBean
     LocationService locationService;

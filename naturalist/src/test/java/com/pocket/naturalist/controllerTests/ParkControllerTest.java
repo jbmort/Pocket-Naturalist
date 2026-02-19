@@ -24,6 +24,9 @@ import com.pocket.naturalist.controller.ParkController;
 import com.pocket.naturalist.dto.ParkDataDTO;
 import com.pocket.naturalist.entity.Animal;
 import com.pocket.naturalist.entity.Park;
+import com.pocket.naturalist.repository.UserRepository;
+import com.pocket.naturalist.security.JwtService;
+import com.pocket.naturalist.security.ParkSecurity;
 import com.pocket.naturalist.service.ParkService;
 
 @WebMvcTest(controllers = ParkController.class)
@@ -33,6 +36,16 @@ class ParkControllerTest {
     GeometryFactory geometryFactory;
     ObjectMapper objectMapper;
     Polygon parkBoundary;
+
+    @MockitoBean
+    private JwtService jwtService;
+
+    @MockitoBean(name = "parkSecurity") 
+    private ParkSecurity parkSecurity;
+
+    
+    @MockitoBean
+    private UserRepository userRepository; 
 
 
     @MockitoBean

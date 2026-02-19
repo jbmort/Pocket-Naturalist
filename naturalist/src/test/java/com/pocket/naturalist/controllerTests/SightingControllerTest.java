@@ -29,6 +29,9 @@ import com.pocket.naturalist.dto.SightingMapDTO;
 import com.pocket.naturalist.dto.SightingReportDTO;
 import com.pocket.naturalist.entity.Animal;
 import com.pocket.naturalist.entity.Park;
+import com.pocket.naturalist.repository.UserRepository;
+import com.pocket.naturalist.security.JwtService;
+import com.pocket.naturalist.security.ParkSecurity;
 import com.pocket.naturalist.service.SightingService;
 
 @WebMvcTest(controllers = SightingController.class)
@@ -41,6 +44,16 @@ class SightingControllerTest {
     private Animal animal;
     private Point locationOfAnimal;
     private Park park;
+
+    @MockitoBean
+    private JwtService jwtService;
+
+    @MockitoBean(name = "parkSecurity") 
+    private ParkSecurity parkSecurity;
+
+    
+    @MockitoBean
+    private UserRepository userRepository; 
 
     @MockitoBean
     private SightingService sightingService;
