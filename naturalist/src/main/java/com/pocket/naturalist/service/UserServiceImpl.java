@@ -1,7 +1,10 @@
 package com.pocket.naturalist.service;
 
+import org.springframework.stereotype.Service;
+
 import com.pocket.naturalist.dto.UserDataDto;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     @Override
