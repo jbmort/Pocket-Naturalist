@@ -2,6 +2,8 @@ package com.pocket.naturalist.service;
 
 import org.springframework.stereotype.Service;
 
+import com.pocket.naturalist.dto.JWTAuthResponse;
+import com.pocket.naturalist.dto.RegistrationDTO;
 import com.pocket.naturalist.dto.UserDataDto;
 import com.pocket.naturalist.entity.User;
 import com.pocket.naturalist.entity.UserParkStat;
@@ -22,6 +24,13 @@ public class UserServiceImpl implements UserService {
                                                 .sum();
 
         return new UserDataDto(userName, totalPoints, user.getBadges());
+    }
+
+
+    @Override
+    public JWTAuthResponse registerNewUser(RegistrationDTO newUser) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'registerNewUser'");
     }
     
 }

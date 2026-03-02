@@ -28,11 +28,14 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pocket.naturalist.controller.LogInController;
+import com.pocket.naturalist.dto.JWTAuthResponse;
 import com.pocket.naturalist.dto.LoginDTO;
+import com.pocket.naturalist.dto.RegistrationDTO;
 import com.pocket.naturalist.repository.UserRepository;
 import com.pocket.naturalist.security.JwtService;
 import com.pocket.naturalist.security.ParkSecurity;
 import com.pocket.naturalist.security.SecurityConfig;
+import com.pocket.naturalist.service.UserService;
 
 @WebMvcTest(LogInController.class)
 @Import(SecurityConfig.class)
@@ -51,6 +54,9 @@ class LogInControllerTest {
 
     @MockitoBean
     private AuthenticationManager authenticationManager;
+
+    @MockitoBean
+    private UserService userService;
 
     @MockitoBean
     private JwtService jwtService;
@@ -81,12 +87,26 @@ class LogInControllerTest {
         when(authenticationManager.authenticate(any())).thenReturn(mockAuth);
         when(jwtService.generateToken(mockUser)).thenReturn(expectedToken);
 
-        mockMvc.perform(post("/login")
+        mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(logInCreds)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").value(expectedToken));
 
+    }
+
+    @Test
+    void shouldAllowNewUserToRegister() throws Exception{
+        RegistrationDTO newUser = new RegistrationDTO("user@email.com", "password", "name");
+
+        String expectedToken = "eyJhbGciOiJIUzI1NiJ9.mockTokenValue";
+
+        when(userService.registerNewUser(newUser)).thenReturn(new JWTAuthResponse(expectedToken));
+
+        mockMvc.perform(post("/auth/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(newUser)))
+            .andExpect(status().isOk());
     }
     
 }
