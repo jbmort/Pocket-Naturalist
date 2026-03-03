@@ -7,10 +7,16 @@ import com.pocket.naturalist.dto.RegistrationDTO;
 import com.pocket.naturalist.dto.UserDataDto;
 import com.pocket.naturalist.entity.User;
 import com.pocket.naturalist.entity.UserParkStat;
+import com.pocket.naturalist.entity.Enums.Role;
 import com.pocket.naturalist.repository.UserRepository;
+import com.pocket.naturalist.security.JwtService;
+import com.pocket.naturalist.security.SecurityUser;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+
+    private final JwtService jwtService = new JwtService();
 
     UserRepository userRepository;
 
@@ -29,8 +35,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public JWTAuthResponse registerNewUser(RegistrationDTO newUser) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'registerNewUser'");
+        String username = newUser.username();
+        String password = newUser.password();
+
+        User user = new User();
+        user.setUsername(username);
+        user.setRole(Role.USER);
+        user.setPassword(password);
+
+        userRepository.save(user);
+
+        String token = jwtService.generateToken(new SecurityUser(user));
+
+        return new JWTAuthResponse(token);
+
     }
     
 }
