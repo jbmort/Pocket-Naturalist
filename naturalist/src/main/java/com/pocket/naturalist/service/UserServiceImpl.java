@@ -1,5 +1,6 @@
 package com.pocket.naturalist.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.pocket.naturalist.dto.JWTAuthResponse;
@@ -16,9 +17,19 @@ import com.pocket.naturalist.security.SecurityUser;
 public class UserServiceImpl implements UserService {
 
 
-    private final JwtService jwtService = new JwtService();
-
+    JwtService jwtService;
     UserRepository userRepository;
+    PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(
+        JwtService jwtService,
+        UserRepository userRepository,
+        PasswordEncoder passwordEncoder
+    ){
+        this.jwtService = jwtService;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     @Override
@@ -38,17 +49,20 @@ public class UserServiceImpl implements UserService {
         String username = newUser.username();
         String password = newUser.password();
 
+        if (userRepository.existsByUsername(username)) {
+            throw new IllegalStateException("Error: Username is already taken!");
+        }
+
         User user = new User();
         user.setUsername(username);
         user.setRole(Role.USER);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
 
         userRepository.save(user);
 
         String token = jwtService.generateToken(new SecurityUser(user));
 
         return new JWTAuthResponse(token);
-
     }
     
 }
