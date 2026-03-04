@@ -35,9 +35,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // 1. PUBLIC ROUTES (Login, Public Park Pages)
                 .requestMatchers("/auth/**", "/park/**").permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/sightings/**").permitAll()
 
                 // 2. USER ROUTES (Record sightings and checkin)
-                .requestMatchers("/sightings/**", "/checkin/**").hasAnyRole("ADMIN", "USER")
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/sightings/**", "/checkin/**").authenticated()
                 
                 // 3. ADMIN ROUTES (Broad protection)
                 .requestMatchers("/admin/**").hasRole("ADMIN")
