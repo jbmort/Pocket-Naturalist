@@ -191,7 +191,6 @@ class UserServiceTest {
         int expectedPoints = 25;
 
         assertEquals(expectedPoints, points);
-
     }
 
 }
