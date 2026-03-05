@@ -81,4 +81,5 @@ class UserControllerTest {
         mockMvc.perform(get("/user/data"))
             .andExpect(status().is4xxClientError());
     }
+
 }

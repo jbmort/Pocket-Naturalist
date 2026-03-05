@@ -30,6 +30,9 @@ public class CheckInController {
         boolean isInside = locationService.isPointInsideParkBoundaries(location, parkSlug);
 
         CheckInResponseDTO responseDTO = new CheckInResponseDTO(parkSlug, isInside);
+
+        // add user service method to check if user has entered the park for the first time that day
+        // award points if its their first time in the park that day
         return ResponseEntity.ok(responseDTO);
         
     }
@@ -42,6 +45,8 @@ public class CheckInController {
         boolean isNearFeature = locationService.isPointNearFeature(location, parkSlug, featureId);
 
         CheckInResponseFeatureDTO responseDTO = new CheckInResponseFeatureDTO(parkSlug, featureId, isNearFeature);
+
+        // add user service method to verify that the user hasnt checked in that day and award points 
         
         return ResponseEntity.ok(responseDTO);
     

@@ -20,7 +20,7 @@ public class UserAccountController {
     }
 
     @GetMapping("/data")
-    public ResponseEntity<UserDataDto> updateUserInfo(Authentication auth){
+    public ResponseEntity<UserDataDto> getUserInfo(Authentication auth){
         String userName = auth.getName();
 
         UserDataDto data = userService.getUserInfo(userName);
