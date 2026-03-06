@@ -2,6 +2,7 @@ package com.pocket.naturalist.controller;
 
 import org.locationtech.jts.geom.Point;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,28 +12,32 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pocket.naturalist.dto.CheckInResponseDTO;
 import com.pocket.naturalist.dto.CheckInResponseFeatureDTO;
 import com.pocket.naturalist.service.LocationService;
+import com.pocket.naturalist.service.UserService;
 
 @RestController
 @RequestMapping("/checkin")
 public class CheckInController {
 
     LocationService locationService;
+    UserService userService;
 
-    public CheckInController(LocationService locationService){
+    public CheckInController(LocationService locationService, UserService userService){
         this.locationService = locationService;
+        this.userService = userService;
     }
 
 
     @PostMapping("/{parkSlug}")
     public ResponseEntity<CheckInResponseDTO> checkIn(@PathVariable String parkSlug,
-                                                        @RequestBody Point location)
+                                                        @RequestBody Point location,
+                                                    Authentication authentication)
     {
         boolean isInside = locationService.isPointInsideParkBoundaries(location, parkSlug);
-
         CheckInResponseDTO responseDTO = new CheckInResponseDTO(parkSlug, isInside);
 
-        // add user service method to check if user has entered the park for the first time that day
-        // award points if its their first time in the park that day
+        String username = authentication.getName();
+        userService.addCheckinPoints(username, parkSlug);
+
         return ResponseEntity.ok(responseDTO);
         
     }
