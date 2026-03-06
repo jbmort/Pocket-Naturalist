@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Set;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.n52.jackson2.datatype.jts.JtsModule;
@@ -115,8 +116,8 @@ class AdminControllerTest {
             .andExpect(status().isForbidden());
     }
 
-     @Test
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN" )
     void shouldAllowAdminToUpdateParkData() throws Exception{
         Park updatedPark = new Park("Updated Park");
         updatedPark.setBoundaryList(park.getBoundaryList());
@@ -125,13 +126,16 @@ class AdminControllerTest {
         ParkDataDTO data = new ParkDataDTO("Updated Park", park.getBoundaryList(), park.getFeatures(), park.getAnimals());
 
         String jsonData = objectMapper.writeValueAsString(data);
-        when(parkService.updateParkData(park.getUrlSlug(), data)).thenReturn(updatedPark);
+        when(parkService.updateParkData(eq("test-park"), any(ParkDataDTO.class))).thenReturn(data);
+        when(parkSecurity.isParkAdmin(any(), eq(parkSlug))).thenReturn(true);
+
 
         this.mockMvc.perform(post("/admin/park/" + parkSlug + "/update")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonData))
                 .andExpect(status().isOk())
-                .andExpect(content().string(jsonData));
+                .andExpect(content().json(jsonData));
     }
 
 

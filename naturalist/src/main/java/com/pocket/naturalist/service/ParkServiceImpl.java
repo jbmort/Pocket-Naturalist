@@ -45,5 +45,11 @@ public class ParkServiceImpl implements ParkService{
                                 park.getAnimals()
                             );
     }
+
+    @Override
+    public ParkDataDTO updateParkData(String urlSlug, ParkDataDTO data) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateParkData'");
+    }
     
 }

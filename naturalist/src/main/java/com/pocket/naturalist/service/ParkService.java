@@ -10,5 +10,7 @@ public interface ParkService {
     ParkDataDTO getMainPageParkData(String parkSlug);
 
     ParkDataDTO getAdminParkData(String parkSlug);
+
+    ParkDataDTO updateParkData(String urlSlug, ParkDataDTO data);
     
 }

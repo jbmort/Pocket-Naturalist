@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,5 +30,14 @@ public class AdminController {
 
         return ResponseEntity.ok(data);
     }
-    
+
+    @PreAuthorize("@parkSecurity.isParkAdmin(authentication, #parkSlug)")
+    @PostMapping("/park/{parkSlug}/update")
+    public ResponseEntity<ParkDataDTO> updateParkData(@PathVariable String parkSlug,
+                                                        @RequestBody ParkDataDTO data){
+                        System.out.println(" updating" + parkSlug + "with data: " + data.parkName());
+        ParkDataDTO updatedData = parkService.updateParkData(parkSlug, data);
+        return ResponseEntity.ok(updatedData);
+    }
+
 }
