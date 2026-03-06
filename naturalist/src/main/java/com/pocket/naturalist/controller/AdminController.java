@@ -35,7 +35,6 @@ public class AdminController {
     @PostMapping("/park/{parkSlug}/update")
     public ResponseEntity<ParkDataDTO> updateParkData(@PathVariable String parkSlug,
                                                         @RequestBody ParkDataDTO data){
-                        System.out.println(" updating" + parkSlug + "with data: " + data.parkName());
         ParkDataDTO updatedData = parkService.updateParkData(parkSlug, data);
         return ResponseEntity.ok(updatedData);
     }

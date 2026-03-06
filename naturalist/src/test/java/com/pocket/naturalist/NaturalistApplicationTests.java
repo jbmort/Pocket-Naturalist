@@ -11,7 +11,7 @@ import com.pocket.naturalist.repository.UserRepository;
 
 @SpringBootTest
 class NaturalistApplicationTests {
-	 @Mock
+	@Mock
     private AnimalRepository animalRepository;
 
     @Mock
