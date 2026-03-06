@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 
 @Component
-public class AnimalMovementScheduler {
+public class animalMovementScheduler {
 
    
 

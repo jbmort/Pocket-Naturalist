@@ -8,7 +8,7 @@ import java.util.Set;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 
-import com.pocket.naturalist.config.GeoUtils;
+import com.pocket.naturalist.config.geoUtils;
 import com.pocket.naturalist.dto.ParkDataDTO;
 
 import jakarta.persistence.CascadeType;
@@ -61,7 +61,7 @@ public class Park {
          this.name = name;
          this.urlSlug = createSlug(name);
          this.boundaryList = boundaries;
-         this.mapCenter = GeoUtils.calculateCenter(boundaries);
+         this.mapCenter = geoUtils.calculateCenter(boundaries);
 
    }
 
@@ -155,7 +155,7 @@ public class Park {
         this.setBoundaryList(updatedData.boundaries());
         this.setFeatures(updatedData.features());
         this.setAnimals(updatedData.animals());
-        this.setMapCenter(GeoUtils.calculateCenter(updatedData.boundaries()));
+        this.setMapCenter(geoUtils.calculateCenter(updatedData.boundaries()));
 
     }
 }
