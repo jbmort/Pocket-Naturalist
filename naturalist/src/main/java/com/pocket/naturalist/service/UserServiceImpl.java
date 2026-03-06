@@ -1,6 +1,5 @@
 package com.pocket.naturalist.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.pocket.naturalist.dto.JWTAuthResponse;
 import com.pocket.naturalist.dto.RegistrationDTO;
 import com.pocket.naturalist.dto.UserDataDto;
-import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.entity.User;
 import com.pocket.naturalist.entity.UserParkStat;
 import com.pocket.naturalist.entity.Enums.Role;
@@ -21,7 +19,7 @@ import com.pocket.naturalist.security.SecurityUser;
 @Service
 public class UserServiceImpl implements UserService {
 
-    int POINTS_FOR_CHECKIN = 5;
+    public static final int POINTS_FOR_CHECKIN = 5;
 
     JwtService jwtService;
     UserRepository userRepository;
