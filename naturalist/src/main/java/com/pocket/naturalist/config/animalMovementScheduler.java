@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 
 @Component
-public class animalMovementScheduler {
+public class AnimalMovementScheduler {
 
    
 
@@ -32,7 +32,7 @@ public class animalMovementScheduler {
     Polygon boundary = geometryFactory.createPolygon(shell, null);
     
     org.locationtech.jts.geom.Point mapCenter = geometryFactory.createPoint(new Coordinate(-93.2725, 41.550));
-    Park park = new Park("Test Park", List.of(boundary), mapCenter);
+    Park park = new Park("Test Park", List.of(boundary));
 
     Animal bison = new Animal("Bison bison", "American Bison", "A large, grazing mammal native to North America.");
 

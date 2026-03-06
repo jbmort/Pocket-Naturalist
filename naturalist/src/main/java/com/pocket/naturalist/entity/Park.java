@@ -8,6 +8,9 @@ import java.util.Set;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 
+import com.pocket.naturalist.config.GeoUtils;
+import com.pocket.naturalist.dto.ParkDataDTO;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -54,11 +57,12 @@ public class Park {
         this.urlSlug = createSlug(name);
     }
 
-   public Park(String name, List<Polygon> boundaries, Point mapCenter) {
+   public Park(String name, List<Polygon> boundaries) {
          this.name = name;
          this.urlSlug = createSlug(name);
          this.boundaryList = boundaries;
-         this.mapCenter = mapCenter;
+         this.mapCenter = GeoUtils.calculateCenter(boundaries);
+
    }
 
     private String createSlug(String parkName) {
@@ -144,5 +148,14 @@ public class Park {
 
     public void addFeature(Feature feature){
         this.features.add(feature);
+    }
+
+    public void updatePark(ParkDataDTO updatedData){
+        this.setName(updatedData.parkName());
+        this.setBoundaryList(updatedData.boundaries());
+        this.setFeatures(updatedData.features());
+        this.setAnimals(updatedData.animals());
+        this.setMapCenter(GeoUtils.calculateCenter(updatedData.boundaries()));
+
     }
 }
