@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Point;
-import com.pocket.naturalist.config.AnimalMovementScheduler;
+import com.pocket.naturalist.config.animalMovementScheduler;
 import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.entity.Sighting;
 
@@ -23,7 +23,7 @@ class AnimalMovementSchedulerTest {
     @Test
     void shouldMoveAnimalWithinParkBoundary(){
         
-            AnimalMovementScheduler scheduler = new AnimalMovementScheduler();
+            animalMovementScheduler scheduler = new animalMovementScheduler();
             Point firstSighting = scheduler.simulateAnimalMovement().get(0).getLocationOfAnimal();
             double firstSightingX = firstSighting.getX();
             double firstSightingY = firstSighting.getY();

@@ -11,8 +11,8 @@ import java.util.List;
 
 
 @Component
-public class GeoUtils {
-    private GeoUtils() {
+public class geoUtils {
+    private geoUtils() {
     }
 
     public static Point calculateCenter(List<Polygon> boundaries){
