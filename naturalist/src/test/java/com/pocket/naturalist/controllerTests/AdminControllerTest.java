@@ -4,20 +4,25 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.n52.jackson2.datatype.jts.JtsModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pocket.naturalist.controller.AdminController;
 import com.pocket.naturalist.dto.ParkDataDTO;
 import com.pocket.naturalist.entity.Animal;
@@ -37,6 +42,9 @@ class AdminControllerTest {
     // 3. Retrieve park data for analysis and visualization GET
     // 4. Add another admin POST 
     // 5. Send park data to show current values in the park editing form
+
+    ObjectMapper objectMapper;
+
 
     @MockitoBean(name="parkSecurity")
     ParkSecurity parkSecurity;
@@ -66,6 +74,8 @@ class AdminControllerTest {
         adminUser.setRole(Role.ADMIN);
         adminUser.setPassword("password");
         adminUser.setUsername("testuser@test.com");
+        this.objectMapper = new ObjectMapper().registerModule(new JtsModule());
+
     }
 
 
@@ -104,6 +114,27 @@ class AdminControllerTest {
         this.mockMvc.perform(get("/admin/park/" + parkSlug + "/info"))
             .andExpect(status().isForbidden());
     }
+
+     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    void shouldAllowAdminToUpdateParkData() throws Exception{
+        Park updatedPark = new Park("Updated Park");
+        updatedPark.setBoundaryList(park.getBoundaryList());
+        updatedPark.setFeatures(park.getFeatures());
+        updatedPark.setAnimals(park.getAnimals());
+        ParkDataDTO data = new ParkDataDTO("Updated Park", park.getBoundaryList(), park.getFeatures(), park.getAnimals());
+
+        String jsonData = objectMapper.writeValueAsString(data);
+        when(parkService.updateParkData(park.getUrlSlug(), data)).thenReturn(updatedPark);
+
+        this.mockMvc.perform(post("/admin/park/" + parkSlug + "/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonData))
+                .andExpect(status().isOk())
+                .andExpect(content().string(jsonData));
+    }
+
+
     
 
 }
