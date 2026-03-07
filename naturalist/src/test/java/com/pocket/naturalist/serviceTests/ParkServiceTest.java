@@ -1,6 +1,7 @@
 package com.pocket.naturalist.serviceTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -69,6 +70,25 @@ class ParkServiceTest {
         ParkDataDTO serviceResult = parkService.getMainPageParkData(park.getUrlSlug());
 
         assertEquals(null, serviceResult); 
+    }
+
+    @Test
+    void shouldUpdateParkDataFromAdminSubmission(){
+        ParkDataDTO updatedData = new ParkDataDTO("Updated Park", park.getBoundaryList(), park.getFeatures(), park.getAnimals());
+        Park updatedPark = new Park("Updated Park");
+        updatedPark.setBoundaryList(park.getBoundaryList());
+        updatedPark.setFeatures(park.getFeatures());
+        updatedPark.setAnimals(park.getAnimals());
+
+        when(parkRepository.findByUrlSlug(park.getUrlSlug())).thenReturn(Optional.of(park));
+
+        ParkDataDTO result = parkService.updateParkData(park.getUrlSlug(), updatedData);
+
+        assertNotEquals("Test Park", result.parkName());
+        assertEquals(updatedPark.getBoundaryList(), result.boundaries());
+        assertEquals(updatedPark.getFeatures(), result.features());
+        assertEquals(updatedPark.getAnimals(), result.animals());
+        
     }
 
 

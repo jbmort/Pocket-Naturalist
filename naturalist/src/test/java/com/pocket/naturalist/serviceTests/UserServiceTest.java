@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;

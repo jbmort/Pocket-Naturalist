@@ -89,6 +89,7 @@ public class Park {
 
     public void setName(String name) {
         this.name = name;
+        this.urlSlug = createSlug(name);
     }
 
     public String getUrlSlug() {

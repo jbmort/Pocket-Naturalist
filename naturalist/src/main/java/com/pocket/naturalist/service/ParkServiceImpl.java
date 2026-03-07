@@ -34,6 +34,12 @@ public class ParkServiceImpl implements ParkService{
         }
     }
 
+
+    /**
+     * Retrives park data to populate the park admin dashboard
+     * @param parkSlug
+     * @return ParkDataDTO
+     */
     @Override
     public ParkDataDTO getAdminParkData(String parkSlug) {
         Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow();
@@ -46,10 +52,29 @@ public class ParkServiceImpl implements ParkService{
                             );
     }
 
+    /**
+     * Applies updates from the admin to the associated park
+     * @param urlSlug
+     * @param updatedData
+     */
+
     @Override
-    public ParkDataDTO updateParkData(String urlSlug, ParkDataDTO data) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateParkData'");
+    public ParkDataDTO updateParkData(String urlSlug, ParkDataDTO updatedData) {
+
+        Park park = parkRepository.findByUrlSlug(urlSlug).orElseThrow();
+
+        park.setName(updatedData.parkName());
+        park.setBoundaryList(updatedData.boundaries());
+        park.setFeatures(updatedData.features());
+        park.setAnimals(updatedData.animals());
+        parkRepository.save(park);
+
+        return new ParkDataDTO(
+                                park.getName(), 
+                                park.getBoundaryList(), 
+                                park.getFeatures(),  
+                                park.getAnimals()
+                            );
     }
     
 }

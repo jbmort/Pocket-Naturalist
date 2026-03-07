@@ -66,6 +66,7 @@ class AdminControllerTest {
     User adminUser;
     Park park;
 
+    @SuppressWarnings("removal")
     @BeforeEach
     void setup(){
         park = new Park("Test Park");

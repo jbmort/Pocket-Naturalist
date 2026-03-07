@@ -69,6 +69,7 @@ class CheckInControllerTest {
     @MockitoBean
     private LocationService locationService;
 
+    @SuppressWarnings("removal")
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper().registerModule(new JtsModule());
