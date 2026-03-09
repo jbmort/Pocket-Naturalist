@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,6 +27,7 @@ import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.entity.User;
 import com.pocket.naturalist.entity.UserParkStat;
 import com.pocket.naturalist.entity.Enums.Role;
+import com.pocket.naturalist.repository.ParkRepository;
 import com.pocket.naturalist.repository.UserRepository;
 import com.pocket.naturalist.security.JwtService;
 import com.pocket.naturalist.security.SecurityUser;
@@ -42,6 +44,9 @@ class UserServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private ParkRepository parkRepository;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -190,6 +195,44 @@ class UserServiceTest {
         int expectedPoints = 25;
 
         assertEquals(expectedPoints, points);
+    }
+
+    @Test
+    void shouldSetUserAsAdminOfPark(){
+        String username = "testUser";
+        User mockUser = new User();
+        mockUser.setUsername(username);
+        mockUser.setBadges(List.of(new Badge("Explorer", "icon.png")));
+
+        Park park1 = new Park("park1");
+        Park park2 = new Park("park2");
+
+        UserParkStat stat1 = new UserParkStat(mockUser, park1);
+        stat1.setLifetimePoints(10);
+        stat1.setLastVisited(LocalDateTime.now().minusDays(2));
+        UserParkStat stat2 = new UserParkStat(mockUser, park2);
+        stat2.setLifetimePoints(25);
+        stat2.setLastVisited(LocalDateTime.now());
+        mockUser.setUserParkStats(List.of(stat1, stat2));
+
+        User newAdmin = mockUser;
+        newAdmin.setRole(Role.ADMIN);
+        newAdmin.addManagedPark(park1);
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(mockUser));
+        when(parkRepository.findByUrlSlug("park1")).thenReturn(Optional.of(park1));
+        when(userRepository.save(any())).thenReturn(newAdmin);
+
+        userService.addAdminToPark("park1", username);
+
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(userCaptor.capture());
+        User savedUser = userCaptor.getValue();
+
+        assertEquals(Role.ADMIN, savedUser.getRole());
+        assertTrue(savedUser.getManagedParks().contains(park1));
+        assertFalse(savedUser.getManagedParks().contains(park2));
+
     }
 
 }
