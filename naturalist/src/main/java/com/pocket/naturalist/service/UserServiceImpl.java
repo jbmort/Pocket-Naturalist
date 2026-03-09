@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.pocket.naturalist.dto.JWTAuthResponse;
 import com.pocket.naturalist.dto.RegistrationDTO;
 import com.pocket.naturalist.dto.UserDataDto;
+import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.entity.User;
 import com.pocket.naturalist.entity.UserParkStat;
 import com.pocket.naturalist.entity.Enums.Role;
@@ -86,6 +87,30 @@ public class UserServiceImpl implements UserService {
 
         return user;
      
+    }
+
+
+    @Override
+    public String addAdminToPark(String parkSlug, String newAdminUsername) {
+
+        User newAdmin = userRepository.findByUsername(newAdminUsername).orElseThrow();
+        Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow();
+
+        if(!newAdmin.getRole().equals(Role.ADMIN)){
+            newAdmin.setRole(Role.ADMIN);
+        }
+        newAdmin.addManagedPark(park);
+        User updatedUser = userRepository.save(newAdmin);
+
+        if(updatedUser.getManagedParks().contains(park)
+            && !updatedUser.getRole().equals(Role.ADMIN)
+            && updatedUser.getUsername().equals(newAdmin.getUsername())){
+            
+            return "success";
+            }
+        else{
+            return "failure";
+        }
     }
     
 }

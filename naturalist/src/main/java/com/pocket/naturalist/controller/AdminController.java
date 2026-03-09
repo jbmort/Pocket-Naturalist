@@ -11,15 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pocket.naturalist.dto.ParkDataDTO;
 import com.pocket.naturalist.service.ParkService;
+import com.pocket.naturalist.service.UserService;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
 
     private final ParkService parkService;
+    private final UserService userService;
 
-    AdminController(ParkService parkService){
+    AdminController(ParkService parkService, UserService userService){
         this.parkService = parkService;
+        this.userService = userService;
     }
 
     @PreAuthorize("@parkSecurity.isParkAdmin(authentication, #parkSlug)")
@@ -37,6 +40,13 @@ public class AdminController {
                                                         @RequestBody ParkDataDTO data){
         ParkDataDTO updatedData = parkService.updateParkData(parkSlug, data);
         return ResponseEntity.ok(updatedData);
+    }
+
+    @PreAuthorize("@parkSecurity.isParkAdmin(authentication, #parkSlug)")
+    @PostMapping("/park/{parkSlug}/addAdmin")
+    public ResponseEntity<String> addAdminToPark(@PathVariable String parkSlug, @RequestBody String newAdminUsername){
+        String result = userService.addAdminToPark(parkSlug, newAdminUsername);
+        return ResponseEntity.status(result.equals("success") ? 201 : 400).body(result);
     }
 
 }

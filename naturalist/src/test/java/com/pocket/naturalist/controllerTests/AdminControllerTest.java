@@ -33,6 +33,7 @@ import com.pocket.naturalist.entity.Enums.Role;
 import com.pocket.naturalist.security.JwtService;
 import com.pocket.naturalist.security.ParkSecurity;
 import com.pocket.naturalist.service.ParkService;
+import com.pocket.naturalist.service.UserService;
 
 @WebMvcTest(controllers = AdminController.class)
 @EnableMethodSecurity
@@ -61,6 +62,9 @@ class AdminControllerTest {
 
     @MockitoBean
     private JwtService jwtService;
+
+    @MockitoBean
+    private UserService userService;
 
     String parkSlug;
     User adminUser;
@@ -138,6 +142,61 @@ class AdminControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(jsonData));
     }
+
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    void shouldAllowAdminToAddNewAdmin() throws Exception{
+
+        User newAdmin = new User();
+        newAdmin.setUsername("newAdmin@email.com");
+        newAdmin.setRole(Role.USER);
+
+        when(userService.addAdminToPark(parkSlug, "newAdmin@email.com")).thenReturn("success");
+        when(parkSecurity.isParkAdmin(any(), eq(parkSlug))).thenReturn(true);
+        this.mockMvc.perform(post("/admin/park/" + parkSlug + "/addAdmin")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("newAdmin@email.com"))
+                .andExpect(status().isCreated())
+                .andExpect(content().string("success"));
+    }
+
+    @Test
+    @WithMockUser(username = "notAdmin", roles = "USER")
+    void shouldRejectUserTryingToAddNewAdmin() throws Exception{
+
+        User newAdmin = new User();
+        newAdmin.setUsername("newAdmin@email.com");
+        newAdmin.setRole(Role.USER);
+
+        when(userService.addAdminToPark(parkSlug, "newAdmin@email.com")).thenReturn("success");
+        when(parkSecurity.isParkAdmin(any(), eq(parkSlug))).thenReturn(false);
+        this.mockMvc.perform(post("/admin/park/" + parkSlug + "/addAdmin")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("newAdmin@email.com"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    void shouldRejectAdminToAddNewAdminIfUserDoesNotExist() throws Exception{
+
+        User newAdmin = new User();
+        newAdmin.setUsername("newAdmin@email.com");
+        newAdmin.setRole(Role.USER);
+
+        when(userService.addAdminToPark(parkSlug, "newAdmin@email.com")).thenReturn("failure");
+        when(parkSecurity.isParkAdmin(any(), eq(parkSlug))).thenReturn(true);
+        this.mockMvc.perform(post("/admin/park/" + parkSlug + "/addAdmin")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("newAdmin@email.com"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("failure"));
+    }
+
+
 
 
     

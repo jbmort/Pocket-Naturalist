@@ -1,0 +1,136 @@
+Date : 2026-03-07 12:44:10
+Directory : /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist
+Total : 77 files,  3108 codes, 188 comments, 1096 blanks, all 4392 lines
+
+Languages
++-----------------+------------+------------+------------+------------+------------+
+| language        | files      | code       | comment    | blank      | total      |
++-----------------+------------+------------+------------+------------+------------+
+| Java            |         71 |      2,818 |        136 |      1,056 |      4,010 |
+| Batch           |          1 |        139 |         26 |         25 |        190 |
+| XML             |          1 |        132 |         11 |          5 |        148 |
+| Java Properties |          3 |         19 |          6 |          9 |         34 |
+| YAML            |          1 |          0 |          9 |          1 |         10 |
++-----------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                                    | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                                       |         77 |      3,108 |        188 |      1,096 |      4,392 |
+| . (Files)                                                                                                                               |          3 |        271 |         46 |         31 |        348 |
+| .mvn                                                                                                                                    |          1 |          3 |          0 |          1 |          4 |
+| .mvn/wrapper                                                                                                                            |          1 |          3 |          0 |          1 |          4 |
+| src                                                                                                                                     |         73 |      2,834 |        142 |      1,064 |      4,040 |
+| src/main                                                                                                                                |         57 |      1,716 |        125 |        694 |      2,535 |
+| src/main/java                                                                                                                           |         56 |      1,708 |        122 |        690 |      2,520 |
+| src/main/java/com                                                                                                                       |         56 |      1,708 |        122 |        690 |      2,520 |
+| src/main/java/com/pocket                                                                                                                |         56 |      1,708 |        122 |        690 |      2,520 |
+| src/main/java/com/pocket/naturalist                                                                                                     |         56 |      1,708 |        122 |        690 |      2,520 |
+| src/main/java/com/pocket/naturalist (Files)                                                                                             |          1 |         11 |          0 |          5 |         16 |
+| src/main/java/com/pocket/naturalist/config                                                                                              |          3 |         99 |          3 |         36 |        138 |
+| src/main/java/com/pocket/naturalist/controller                                                                                          |          6 |        215 |          1 |         76 |        292 |
+| src/main/java/com/pocket/naturalist/dto                                                                                                 |         11 |         63 |         31 |         48 |        142 |
+| src/main/java/com/pocket/naturalist/entity                                                                                              |         11 |        709 |          1 |        265 |        975 |
+| src/main/java/com/pocket/naturalist/entity (Files)                                                                                      |          9 |        698 |          1 |        261 |        960 |
+| src/main/java/com/pocket/naturalist/entity/Enums                                                                                        |          2 |         11 |          0 |          4 |         15 |
+| src/main/java/com/pocket/naturalist/repository                                                                                          |          6 |         58 |         15 |         42 |        115 |
+| src/main/java/com/pocket/naturalist/security                                                                                            |          6 |        230 |         20 |         71 |        321 |
+| src/main/java/com/pocket/naturalist/service                                                                                             |         12 |        323 |         51 |        147 |        521 |
+| src/main/resources                                                                                                                      |          1 |          8 |          3 |          4 |         15 |
+| src/test                                                                                                                                |         16 |      1,118 |         17 |        370 |      1,505 |
+| src/test/java                                                                                                                           |         15 |      1,110 |         14 |        366 |      1,490 |
+| src/test/java/com                                                                                                                       |         15 |      1,110 |         14 |        366 |      1,490 |
+| src/test/java/com/pocket                                                                                                                |         15 |      1,110 |         14 |        366 |      1,490 |
+| src/test/java/com/pocket/naturalist                                                                                                     |         15 |      1,110 |         14 |        366 |      1,490 |
+| src/test/java/com/pocket/naturalist (Files)                                                                                             |          1 |         22 |          0 |         10 |         32 |
+| src/test/java/com/pocket/naturalist/configTests                                                                                         |          2 |         39 |          0 |         19 |         58 |
+| src/test/java/com/pocket/naturalist/controllerTests                                                                                     |          6 |        550 |          8 |        167 |        725 |
+| src/test/java/com/pocket/naturalist/entityTests                                                                                         |          1 |         94 |          0 |         18 |        112 |
+| src/test/java/com/pocket/naturalist/serviceTests                                                                                        |          5 |        405 |          6 |        152 |        563 |
+| src/test/resources                                                                                                                      |          1 |          8 |          3 |          4 |         15 |
++-----------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------------------------------------------------+-----------------+------------+------------+------------+------------+
+| filename                                                                                                                                | language        | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------------------------------+-----------------+------------+------------+------------+------------+
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/.mvn/wrapper/maven-wrapper.properties                                            | Java Properties |          3 |          0 |          1 |          4 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/compose.yaml                                                                     | YAML            |          0 |          9 |          1 |         10 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/mvnw.cmd                                                                         | Batch           |        139 |         26 |         25 |        190 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/pom.xml                                                                          | XML             |        132 |         11 |          5 |        148 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/NaturalistApplication.java                   | Java            |         11 |          0 |          5 |         16 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/config/animalMovementScheduler.java          | Java            |         54 |          3 |         23 |         80 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/config/geoUtils.java                         | Java            |         34 |          0 |         10 |         44 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/config/jacksonConfig.java                    | Java            |         11 |          0 |          3 |         14 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/controller/AdminController.java              | Java            |         32 |          0 |         10 |         42 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/controller/CheckInController.java            | Java            |         42 |          1 |         17 |         60 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/controller/LogInController.java              | Java            |         53 |          0 |         18 |         71 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/controller/ParkController.java               | Java            |         27 |          0 |         13 |         40 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/controller/SightingController.java           | Java            |         39 |          0 |          9 |         48 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/controller/UserAccountController.java        | Java            |         22 |          0 |          9 |         31 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/dto/AnimalLocationsDTO.java                  | Java            |          5 |          4 |          5 |         14 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/dto/CheckInResponseDTO.java                  | Java            |          3 |          4 |          3 |         10 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/dto/CheckInResponseFeatureDTO.java           | Java            |          3 |          5 |          3 |         11 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/dto/JWTAuthResponse.java                     | Java            |         20 |          0 |          8 |         28 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/dto/LoginDTO.java                            | Java            |          3 |          0 |          3 |          6 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/dto/ParkDataDTO.java                         | Java            |          8 |          6 |          6 |         20 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/dto/RegistrationDTO.java                     | Java            |          4 |          0 |          4 |          8 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/dto/SightingMapDTO.java                      | Java            |          4 |          4 |          4 |         12 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/dto/SightingPointDTO.java                    | Java            |          4 |          3 |          3 |         10 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/dto/SightingReportDTO.java                   | Java            |          4 |          5 |          4 |         13 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/dto/UserDataDto.java                         | Java            |          5 |          0 |          5 |         10 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/entity/Animal.java                           | Java            |         60 |          0 |         21 |         81 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/entity/Badge.java                            | Java            |         39 |          0 |         14 |         53 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/entity/Enums/OAuthProvider.java              | Java            |          6 |          0 |          2 |          8 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/entity/Enums/Role.java                       | Java            |          5 |          0 |          2 |          7 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/entity/Feature.java                          | Java            |         70 |          0 |         25 |         95 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/entity/FeatureVisit.java                     | Java            |         65 |          0 |         32 |         97 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/entity/Park.java                             | Java            |        121 |          0 |         42 |        163 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/entity/Review.java                           | Java            |         44 |          0 |         18 |         62 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/entity/Sighting.java                         | Java            |         73 |          0 |         30 |        103 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/entity/User.java                             | Java            |        135 |          0 |         46 |        181 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/entity/UserParkStat.java                     | Java            |         91 |          1 |         33 |        125 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/repository/AnimalRepository.java             | Java            |          6 |          0 |          7 |         13 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/repository/FeatureRepository.java            | Java            |          5 |          0 |          5 |         10 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/repository/ParkRepository.java               | Java            |         26 |         15 |         10 |         51 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/repository/SightingsRepository.java          | Java            |          8 |          0 |          6 |         14 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/repository/UserParkStatRepository.java       | Java            |          5 |          0 |          5 |         10 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/repository/UserRepository.java               | Java            |          8 |          0 |          9 |         17 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/security/ApplicationConfig.java              | Java            |         39 |          0 |         14 |         53 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/security/JwtAuthenticationFilter.java        | Java            |         51 |          4 |         13 |         68 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/security/JwtService.java                     | Java            |         55 |          8 |         16 |         79 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/security/ParkSecurity.java                   | Java            |         19 |          1 |          8 |         28 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/security/SecurityConfig.java                 | Java            |         38 |          7 |         10 |         55 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/security/SecurityUser.java                   | Java            |         28 |          0 |         10 |         38 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/service/AdminService.java                    | Java            |          5 |          0 |          4 |          9 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/service/GameificationService.java            | Java            |          7 |          0 |          6 |         13 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/service/GameificationServiceImpl.java        | Java            |         86 |         20 |         27 |        133 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/service/LocationService.java                 | Java            |          8 |          0 |          6 |         14 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/service/LocationServiceImpl.java             | Java            |         16 |          0 |         13 |         29 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/service/LogInService.java                    | Java            |          5 |          0 |          4 |          9 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/service/ParkService.java                     | Java            |          9 |          0 |          8 |         17 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/service/ParkServiceImpl.java                 | Java            |         49 |         15 |         17 |         81 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/service/SightingService.java                 | Java            |          9 |          0 |          9 |         18 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/service/SightingServiceImpl.java             | Java            |         51 |         16 |         20 |         87 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/service/UserService.java                     | Java            |         12 |          0 |          7 |         19 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/java/com/pocket/naturalist/service/UserServiceImpl.java                 | Java            |         66 |          0 |         26 |         92 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/main/resources/application.properties                                        | Java Properties |          8 |          3 |          4 |         15 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/NaturalistApplicationTests.java              | Java            |         22 |          0 |         10 |         32 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/configTests/AnimalMovementSchedulerTest.java | Java            |         36 |          0 |         16 |         52 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/configTests/geoUtilsTest.java                | Java            |          3 |          0 |          3 |          6 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/controllerTests/AdminControllerTest.java     | Java            |        107 |          6 |         33 |        146 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/controllerTests/CheckInControllerTest.java   | Java            |        119 |          1 |         32 |        152 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/controllerTests/LogInControllerTest.java     | Java            |         84 |          0 |         29 |        113 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/controllerTests/ParkControllerTest.java      | Java            |         71 |          1 |         21 |         93 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/controllerTests/SightingControllerTest.java  | Java            |        102 |          0 |         33 |        135 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/controllerTests/UserControllerTest.java      | Java            |         67 |          0 |         19 |         86 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/entityTests/ParkTest.java                    | Java            |         94 |          0 |         18 |        112 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/serviceTests/GameificationServiceTest.java   | Java            |         82 |          5 |         34 |        121 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/serviceTests/LocationServiceTest.java        | Java            |         41 |          0 |         19 |         60 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/serviceTests/ParkServiceTest.java            | Java            |         71 |          0 |         25 |         96 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/serviceTests/SightingServiceTest.java        | Java            |         64 |          0 |         27 |         91 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/java/com/pocket/naturalist/serviceTests/UserServiceTest.java            | Java            |        147 |          1 |         47 |        195 |
+| /Users/jacobmortensen/Repos/Wildlife-Mapper/naturalist/src/test/resources/application.properties                                        | Java Properties |          8 |          3 |          4 |         15 |
+| Total                                                                                                                                   |                 |      3,108 |        188 |      1,096 |      4,392 |
++-----------------------------------------------------------------------------------------------------------------------------------------+-----------------+------------+------------+------------+------------+

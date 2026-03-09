@@ -15,4 +15,6 @@ public interface UserService {
     JWTAuthResponse registerNewUser(RegistrationDTO newUser);
     
     User addCheckinPoints(String username, String parkSlug);
+
+    String addAdminToPark(String parkSlug, String newAdminUsername);
 }
