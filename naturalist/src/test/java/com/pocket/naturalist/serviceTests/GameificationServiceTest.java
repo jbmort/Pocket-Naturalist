@@ -73,15 +73,15 @@ class GameificationServiceTest {
     
     @Test
     void shouldAddpointsForUser(){
-        long userId = testUser.getId();
+        String username = testUser.getUsername();
         String parkSlug = testPark.getUrlSlug();
         Optional<User> optionalUser = Optional.of(testUser);
 
-        when(userRepository.findById(userId)).thenReturn(optionalUser);
+        when(userRepository.findByUsername(username)).thenReturn(optionalUser);
         when(parkRepository.findByUrlSlug(parkSlug)).thenReturn(Optional.of(testPark));
         when(userRepository.save(testUser)).thenReturn(testUser);
 
-        gameificationService.addCheckInPointsForUser(userId, parkSlug);
+        gameificationService.addCheckInPointsForUser(username, parkSlug);
 
         List<UserParkStat> parkCheckIns = testUser.getUserParkStats();
 
@@ -102,11 +102,11 @@ class GameificationServiceTest {
         String parkSlug = testPark.getUrlSlug();
 
         when(parkRepository.findByUrlSlug(parkSlug)).thenReturn(Optional.of(testPark));
-        when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
+        when(userRepository.findByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
         when(featureRepository.findById(feature.getId())).thenReturn(Optional.of(feature));
 
 
-        gameificationService.awardFeaturePoints(testUser.getId(), parkSlug, feature.getId());
+        gameificationService.awardFeaturePoints(testUser.getUsername(), parkSlug, feature.getId());
 
         int points = testUser.getParkStat(parkSlug).orElseThrow().getLifetimePoints();
         LocalDateTime lastVisit = testUser.getParkStat(testPark.getUrlSlug()).orElseThrow().getLastVisited();

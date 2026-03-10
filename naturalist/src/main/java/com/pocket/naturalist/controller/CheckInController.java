@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pocket.naturalist.dto.CheckInResponseDTO;
 import com.pocket.naturalist.dto.CheckInResponseFeatureDTO;
+import com.pocket.naturalist.service.GameificationService;
 import com.pocket.naturalist.service.LocationService;
 import com.pocket.naturalist.service.UserService;
 
@@ -20,10 +21,12 @@ public class CheckInController {
 
     LocationService locationService;
     UserService userService;
+    GameificationService gameificationService;
 
-    public CheckInController(LocationService locationService, UserService userService){
+    public CheckInController(LocationService locationService, UserService userService, GameificationService gameificationService){
         this.locationService = locationService;
         this.userService = userService;
+        this.gameificationService = gameificationService;
     }
 
 
@@ -36,7 +39,7 @@ public class CheckInController {
         CheckInResponseDTO responseDTO = new CheckInResponseDTO(parkSlug, isInside);
 
         String username = authentication.getName();
-        userService.addCheckinPoints(username, parkSlug);
+        gameificationService.addCheckInPointsForUser(username, parkSlug);
 
         return ResponseEntity.ok(responseDTO);
         

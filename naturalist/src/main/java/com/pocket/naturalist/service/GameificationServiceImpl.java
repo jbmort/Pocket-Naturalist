@@ -53,8 +53,8 @@ public class GameificationServiceImpl implements GameificationService{
      * @param parkSlug
      */
     @Override
-    public void addCheckInPointsForUser(long userId, String parkSlug) {
-        Optional<User> user = userRepository.findById(userId);
+    public void addCheckInPointsForUser(String username, String parkSlug) {
+        Optional<User> user = userRepository.findByUsername(username);
 
         Optional<Park> optionalPark = parkRepository.findByUrlSlug(parkSlug);
 
@@ -111,9 +111,9 @@ public class GameificationServiceImpl implements GameificationService{
      * @param parkSlug
      * @param featureId
      */
-    public void awardFeaturePoints(long userId, String parkSlug, long featureId) {
+    public void awardFeaturePoints(String username, String parkSlug, long featureId) {
 
-        User user = userRepository.findById(userId).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow();
         Feature feature = featureRepository.findById(featureId). orElseThrow();
         UserParkStat parkStat;
 
@@ -121,7 +121,7 @@ public class GameificationServiceImpl implements GameificationService{
             parkStat = user.getParkStat(parkSlug).orElseThrow();
         }
         else{
-            addCheckInPointsForUser(userId, parkSlug);
+            addCheckInPointsForUser(username, parkSlug);
             parkStat = user.getParkStat(parkSlug).orElseThrow();
         }
 

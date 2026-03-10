@@ -16,6 +16,7 @@ import com.pocket.naturalist.repository.ParkRepository;
 import com.pocket.naturalist.repository.UserRepository;
 import com.pocket.naturalist.security.JwtService;
 import com.pocket.naturalist.security.SecurityUser;
+import com.pocket.naturalist.service.GameificationService;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,17 +27,20 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
     ParkRepository parkRepository;
+    GameificationService gameficationService;
 
     public UserServiceImpl(
         JwtService jwtService,
         UserRepository userRepository,
         ParkRepository parkRepository,
-        PasswordEncoder passwordEncoder
+        PasswordEncoder passwordEncoder,
+        GameificationService gameificationService
     ){
         this.jwtService = jwtService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.parkRepository = parkRepository;
+        this.gameficationService = gameificationService;
     }
 
 
@@ -71,22 +75,6 @@ public class UserServiceImpl implements UserService {
         String token = jwtService.generateToken(new SecurityUser(user));
 
         return new JWTAuthResponse(token);
-    }
-
-
-    public User addCheckinPoints(String username, String parkSlug) {
-        User user = userRepository.findByUsername(username).orElseThrow();
-
-        UserParkStat stat = user.getParkStat(parkSlug).orElseThrow();
-
-        if(!stat.getLastVisited().isAfter(LocalDateTime.now().minusDays(1))){
-            stat.addPoints(POINTS_FOR_CHECKIN);
-            userRepository.save(user);
-            return user;
-        }
-
-        return user;
-     
     }
 
 

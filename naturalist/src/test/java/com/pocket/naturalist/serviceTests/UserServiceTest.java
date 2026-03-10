@@ -142,62 +142,6 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldAddPointsForFirstDailyCheckin(){
-        String username = "testUser";
-        User mockUser = new User();
-        mockUser.setUsername(username);
-        mockUser.setBadges(List.of(new Badge("Explorer", "icon.png")));
-
-        Park park1 = new Park("park1");
-        Park park2 = new Park("park2");
-
-        UserParkStat stat1 = new UserParkStat(mockUser, park1);
-        stat1.setLifetimePoints(10);
-        stat1.setLastVisited(LocalDateTime.now().minusDays(2));
-        UserParkStat stat2 = new UserParkStat(mockUser, park2);
-        stat2.setLifetimePoints(25);
-        stat2.setLastVisited(LocalDateTime.now());
-        mockUser.setUserParkStats(List.of(stat1, stat2));
-
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(mockUser));
-
-        User result = userService.addCheckinPoints(username, "park1");
-
-        int points = result.getParkStat("park1").get().getLifetimePoints();
-        int expectedPoints = 15;
-
-        assertEquals(expectedPoints, points);
-    }
-
-    @Test
-    void shouldNotAddPointsIfAlreadyVisited(){
-        String username = "testUser";
-        User mockUser = new User();
-        mockUser.setUsername(username);
-        mockUser.setBadges(List.of(new Badge("Explorer", "icon.png")));
-
-        Park park1 = new Park("park1");
-        Park park2 = new Park("park2");
-
-        UserParkStat stat1 = new UserParkStat(mockUser, park1);
-        stat1.setLifetimePoints(10);
-        stat1.setLastVisited(LocalDateTime.now().minusDays(2));
-        UserParkStat stat2 = new UserParkStat(mockUser, park2);
-        stat2.setLifetimePoints(25);
-        stat2.setLastVisited(LocalDateTime.now());
-        mockUser.setUserParkStats(List.of(stat1, stat2));
-
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(mockUser));
-
-        User result = userService.addCheckinPoints(username, "park2");
-
-        int points = result.getParkStat("park2").get().getLifetimePoints();
-        int expectedPoints = 25;
-
-        assertEquals(expectedPoints, points);
-    }
-
-    @Test
     void shouldSetUserAsAdminOfPark(){
         String username = "testUser";
         User mockUser = new User();

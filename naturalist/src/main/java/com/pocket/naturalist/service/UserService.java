@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import com.pocket.naturalist.dto.JWTAuthResponse;
 import com.pocket.naturalist.dto.RegistrationDTO;
 import com.pocket.naturalist.dto.UserDataDto;
-import com.pocket.naturalist.entity.User;
 
 @Service
 public interface UserService {
@@ -14,7 +13,5 @@ public interface UserService {
 
     JWTAuthResponse registerNewUser(RegistrationDTO newUser);
     
-    User addCheckinPoints(String username, String parkSlug);
-
     String addAdminToPark(String parkSlug, String newAdminUsername);
 }

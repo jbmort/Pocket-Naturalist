@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 @Service
 public interface GameificationService {
 
-    void addCheckInPointsForUser(long userId, String parkSlug);
+    void addCheckInPointsForUser(String username, String parkSlug);
 
-    void awardFeaturePoints(long userId, String parkSlug, long featureId);
+    void awardFeaturePoints(String username, String parkSlug, long featureId);
     
 }
