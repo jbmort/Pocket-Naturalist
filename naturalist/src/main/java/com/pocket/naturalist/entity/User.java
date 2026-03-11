@@ -176,5 +176,9 @@ public class User {
         this.managedParks.add(park);
     }
 
+    public void addBadge(Badge badge){
+        this.badges.add(badge);
+    }
+
     
 }

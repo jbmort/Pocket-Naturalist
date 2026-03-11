@@ -1,7 +1,5 @@
 package com.pocket.naturalist.service;
 
-import java.time.LocalDateTime;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +14,6 @@ import com.pocket.naturalist.repository.ParkRepository;
 import com.pocket.naturalist.repository.UserRepository;
 import com.pocket.naturalist.security.JwtService;
 import com.pocket.naturalist.security.SecurityUser;
-import com.pocket.naturalist.service.GameificationService;
 
 @Service
 public class UserServiceImpl implements UserService {

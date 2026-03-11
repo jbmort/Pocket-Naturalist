@@ -46,6 +46,11 @@ public class UserParkStat {
     @UpdateTimestamp
     private LocalDateTime lastVisited;
 
+    @Column(nullable = false)
+    private int numberOfVisits = 0;
+
+  
+
     @OneToMany(mappedBy = "userParkStat", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeatureVisit> featuresVisited;
 
@@ -119,6 +124,12 @@ public class UserParkStat {
         this.featuresVisited = featuresVisited;
     }
 
-    
+      public int getNumberOfVisits() {
+        return numberOfVisits;
+    }
+
+    public void setNumberOfVisits(int numberOfVisits) {
+        this.numberOfVisits = numberOfVisits;
+    }
     
 }
