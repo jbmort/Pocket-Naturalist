@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.pocket.naturalist.entity.Badge;
 import com.pocket.naturalist.entity.Feature;
 import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.entity.User;
@@ -114,6 +115,37 @@ class GameificationServiceTest {
         // should have points for the check in at the park and for the feature interaction
         assertEquals(2, points);
         assertNotNull(lastVisit);
+    }
+
+    @Test
+    void shouldAddBadgeToUserForAccomplishmentOfMilestoneVisits(){
+
+        User user = testUser;
+        user.setUserParkStats(List.of(new UserParkStat(user, testPark)));
+        user.getUserParkStats().get(0).setNumberOfVisits(10);
+
+        gameificationService.checkForMilestoneBadgeAward(user, testPark);
+
+        String assignedBadgeName = user.getBadges().get(0).getName();
+
+        assertEquals("Frequent Visitor: Level 1", assignedBadgeName);
+    }
+
+      @Test
+    void shouldNotAddBAdgeForNonMilestoneVisit(){
+
+        User user = testUser;
+        user.getUserParkStats().get(0).setNumberOfVisits(111);
+        user.setBadges(List.of(new Badge("Frequent Visitor: Level 1", "url"),new Badge("Frequent Visitor: Level 2", "url")));
+
+        gameificationService.checkForMilestoneBadgeAward(user, testPark);
+
+        String firstBadgeName = user.getBadges().get(0).getName();
+        String secondBadgeName = user.getBadges().get(1).getName();
+
+        assertEquals("Frequent Visitor: Level 1", firstBadgeName);
+        assertEquals("Frequent Visitor: Level 2", secondBadgeName);
+        assertEquals(2, user.getBadges().size());
     }
 
     

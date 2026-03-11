@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.pocket.naturalist.entity.Badge;
 import com.pocket.naturalist.entity.Feature;
 import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.entity.User;
@@ -43,9 +44,7 @@ public class GameificationServiceImpl implements GameificationService{
     //Methods should add points for various activities
     // // check in at park
     // // interact with park features
-
-    // ADD 
-    // include checks for badge achievement
+    // // check for badge achievement
 
     /**
      * Adds points for the user for checking in at a park if they have not visited yet that day
@@ -128,5 +127,14 @@ public class GameificationServiceImpl implements GameificationService{
         parkStat.addPoints(feature.getPointValue());
         userParkStatRepository.save(parkStat);
     }
+
+	public void checkForMilestoneBadgeAward(User user, Park park) {
+
+        // must idntify number of visits and check if they have been awarded the badge yet
+        // if not then award the badge
+
+       
+
+	}
     
 }
