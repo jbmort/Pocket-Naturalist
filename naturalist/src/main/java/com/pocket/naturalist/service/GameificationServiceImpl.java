@@ -27,6 +27,7 @@ public class GameificationServiceImpl implements GameificationService{
     ParkRepository parkRepository;
     FeatureRepository featureRepository;
     UserParkStatRepository userParkStatRepository;
+    BadgeService badgeService;
 
     Logger logger = Logger.getLogger(getClass().getName());
 
@@ -34,11 +35,16 @@ public class GameificationServiceImpl implements GameificationService{
     // check in points for the first time visiting a park
     private static final int CHECK_IN_POINTS = 1;
 
-    GameificationServiceImpl(UserRepository userRepository, ParkRepository parkRepository, FeatureRepository featureRepository,UserParkStatRepository userParkStatRepository){
+    GameificationServiceImpl(UserRepository userRepository,
+                            ParkRepository parkRepository,
+                            FeatureRepository featureRepository,
+                            UserParkStatRepository userParkStatRepository,
+                            BadgeService badgeService){
         this.parkRepository = parkRepository;
         this.userRepository = userRepository;
         this.featureRepository = featureRepository;
         this.userParkStatRepository = userParkStatRepository;
+        this.badgeService = badgeService;
     }
 
     //Methods should add points for various activities
@@ -128,11 +134,30 @@ public class GameificationServiceImpl implements GameificationService{
         userParkStatRepository.save(parkStat);
     }
 
-	public void checkForMilestoneBadgeAward(User user, Park park) {
+    /**
+     * Checks if the user has achieved a new visitation milestone for the park and awards them if appropriate.
+     * @param user the user entity to be checked
+     * @param park the park entity to check visitation milestones for
+     * 
+     * @return boolean value that represents if a new badge was awarded or not. Will update the user entity with a new badge and save the user if a badge is awarded.
+     */
+	public boolean checkForMilestoneBadgeAward(User user, Park park) {
+        List<Badge> badges = user.getBadges();
+        int visits = user.getParkStat(park.getUrlSlug()).orElseThrow().getNumberOfVisits();
 
-        // must idntify number of visits and check if they have been awarded the badge yet
-        // if not then award the badge
-
+        if(visits >= 10){
+      
+            for(int milestone : badgeService.getBadgeMilestones()){
+                if (visits >= milestone && badges.stream().noneMatch(b -> b.getName().equals(park.getName() + " : " + milestone + " Visits"))){
+                    System.out.println(milestone);
+                    Badge newBadge = badgeService.createMilestoneBadge(park.getName(), milestone);
+                    user.addBadge(newBadge);
+                    userRepository.save(user);
+                    return true;
+                }
+            }
+        }
+        return false;
        
 
 	}

@@ -3,11 +3,16 @@ package com.pocket.naturalist.serviceTests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +33,7 @@ import com.pocket.naturalist.repository.FeatureRepository;
 import com.pocket.naturalist.repository.ParkRepository;
 import com.pocket.naturalist.repository.UserParkStatRepository;
 import com.pocket.naturalist.repository.UserRepository;
+import com.pocket.naturalist.service.BadgeService;
 import com.pocket.naturalist.service.GameificationServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,6 +43,9 @@ class GameificationServiceTest {
 
     User testUser;
     Park testPark;
+
+    @Mock
+    BadgeService badgeService;
 
     @Mock
     UserRepository userRepository;
@@ -124,10 +133,15 @@ class GameificationServiceTest {
         user.setUserParkStats(List.of(new UserParkStat(user, testPark)));
         user.getUserParkStats().get(0).setNumberOfVisits(10);
 
-        gameificationService.checkForMilestoneBadgeAward(user, testPark);
+        when(badgeService.getBadgeMilestones()).thenReturn(Set.of(10, 100, 250, 500, 1000));
+        when(badgeService.createMilestoneBadge(eq(testPark.getName()), anyInt())).thenReturn(new Badge("Frequent Visitor: Level 1", "url"));
+
+
+        boolean badgeAwarded = gameificationService.checkForMilestoneBadgeAward(user, testPark);
 
         String assignedBadgeName = user.getBadges().get(0).getName();
 
+        assertTrue(badgeAwarded);
         assertEquals("Frequent Visitor: Level 1", assignedBadgeName);
     }
 
@@ -135,16 +149,16 @@ class GameificationServiceTest {
     void shouldNotAddBAdgeForNonMilestoneVisit(){
 
         User user = testUser;
+        user.setUserParkStats(List.of(new UserParkStat(user, testPark)));
+
         user.getUserParkStats().get(0).setNumberOfVisits(111);
-        user.setBadges(List.of(new Badge("Frequent Visitor: Level 1", "url"),new Badge("Frequent Visitor: Level 2", "url")));
+        user.setBadges(List.of(new Badge(testPark.getName() + " : " + 10 + " Visits", "url"),new Badge(testPark.getName() + " : " + 100 + " Visits", "url")));
 
-        gameificationService.checkForMilestoneBadgeAward(user, testPark);
+        when(badgeService.getBadgeMilestones()).thenReturn(Set.of(10,100,250, 500, 1000));        
 
-        String firstBadgeName = user.getBadges().get(0).getName();
-        String secondBadgeName = user.getBadges().get(1).getName();
+        boolean badgeAwarded = gameificationService.checkForMilestoneBadgeAward(user, testPark);
 
-        assertEquals("Frequent Visitor: Level 1", firstBadgeName);
-        assertEquals("Frequent Visitor: Level 2", secondBadgeName);
+        assertEquals(false, badgeAwarded);
         assertEquals(2, user.getBadges().size());
     }
 
