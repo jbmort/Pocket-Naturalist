@@ -53,7 +53,8 @@ public class GameificationServiceImpl implements GameificationService{
     // // check for badge achievement
 
     /**
-     * Adds points for the user for checking in at a park if they have not visited yet that day
+     * Adds points for the user for checking in at a park if they have not visited yet that day.
+     * Also checks for milestone achievement if it the users first daily visit.
      * @param userId
      * @param parkSlug
      */
@@ -85,6 +86,8 @@ public class GameificationServiceImpl implements GameificationService{
                                                                     .collect(Collectors.toCollection(ArrayList::new));
                         newStats.add(currentStat);
                         currentUser.setUserParkStats(newStats);
+                        checkForMilestoneBadgeAward(currentUser, park);
+
                     }
                     else {return;}
                 }
@@ -94,7 +97,6 @@ public class GameificationServiceImpl implements GameificationService{
                     currentStat.addPoints(CHECK_IN_POINTS);
                     currentStat.setLastVisited(LocalDateTime.now());
                     currentUser.addUserParkStat(currentStat);
-
                 }
 
                 userParkStatRepository.save(currentStat);
@@ -149,7 +151,6 @@ public class GameificationServiceImpl implements GameificationService{
       
             for(int milestone : badgeService.getBadgeMilestones()){
                 if (visits >= milestone && badges.stream().noneMatch(b -> b.getName().equals(park.getName() + " : " + milestone + " Visits"))){
-                    System.out.println(milestone);
                     Badge newBadge = badgeService.createMilestoneBadge(park.getName(), milestone);
                     user.addBadge(newBadge);
                     userRepository.save(user);
