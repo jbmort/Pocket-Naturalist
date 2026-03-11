@@ -27,6 +27,7 @@ import com.pocket.naturalist.repository.UserRepository;
 import com.pocket.naturalist.security.JwtService;
 import com.pocket.naturalist.security.ParkSecurity;
 import com.pocket.naturalist.security.SecurityConfig;
+import com.pocket.naturalist.service.GameificationService;
 import com.pocket.naturalist.service.LocationService;
 import com.pocket.naturalist.service.UserService;
 
@@ -68,6 +69,9 @@ class CheckInControllerTest {
 
     @MockitoBean
     private LocationService locationService;
+
+    @MockitoBean
+    private GameificationService gameificationService;
 
     @SuppressWarnings("removal")
     @BeforeEach
