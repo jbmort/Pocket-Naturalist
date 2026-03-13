@@ -50,8 +50,6 @@ public class Park {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     Set<Animal> animals = new HashSet<>();
 
-    
-
     public Park(String name) {
         this.name = name;
         this.urlSlug = createSlug(name);

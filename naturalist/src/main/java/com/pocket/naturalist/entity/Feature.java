@@ -38,6 +38,9 @@ public class Feature {
     Park park;
 
     @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<FeatureVisit> featureVisits = new ArrayList<>();
+
+    @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Review> reviews = new ArrayList<>();
     
     public Feature(String name, Point location, int pointValue, Park park) {

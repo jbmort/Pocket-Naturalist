@@ -1,6 +1,7 @@
 package com.pocket.naturalist.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.UpdateTimestamp;
@@ -49,6 +50,8 @@ public class UserParkStat {
     @Column(nullable = false)
     private int numberOfVisits = 0;
 
+    @OneToMany(mappedBy = "userParkStat", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ParkVisit> parkVisits = new ArrayList<>();
   
 
     @OneToMany(mappedBy = "userParkStat", cascade = CascadeType.ALL, orphanRemoval = true)
