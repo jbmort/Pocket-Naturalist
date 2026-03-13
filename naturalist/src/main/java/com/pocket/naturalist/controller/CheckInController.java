@@ -38,8 +38,10 @@ public class CheckInController {
         boolean isInside = locationService.isPointInsideParkBoundaries(location, parkSlug);
         CheckInResponseDTO responseDTO = new CheckInResponseDTO(parkSlug, isInside);
 
-        String username = authentication.getName();
-        gameificationService.addCheckInPointsForUser(username, parkSlug);
+        if(isInside){
+            String username = authentication.getName();
+            gameificationService.addCheckInPointsForUser(username, parkSlug);
+        }
 
         return ResponseEntity.ok(responseDTO);
         

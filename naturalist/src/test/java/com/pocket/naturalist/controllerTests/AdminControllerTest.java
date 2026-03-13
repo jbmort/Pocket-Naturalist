@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -100,7 +101,7 @@ class AdminControllerTest {
         when(parkSecurity.isParkAdmin(any(), eq(parkSlug))).thenReturn(true);
 
 
-        this.mockMvc.perform(get("/admin/park/" + parkSlug + "/info"))
+        this.mockMvc.perform(get("/admin/park/" + parkSlug))
             .andExpect(status().isOk());
     }
 
@@ -117,7 +118,7 @@ class AdminControllerTest {
         when(parkService.getAdminParkData(parkSlug)).thenReturn(data);
         when(parkSecurity.isParkAdmin(any(), eq(parkSlug))).thenReturn(false);
 
-        this.mockMvc.perform(get("/admin/park/" + parkSlug + "/info"))
+        this.mockMvc.perform(get("/admin/park/" + parkSlug))
             .andExpect(status().isForbidden());
     }
 
@@ -135,7 +136,7 @@ class AdminControllerTest {
         when(parkSecurity.isParkAdmin(any(), eq(parkSlug))).thenReturn(true);
 
 
-        this.mockMvc.perform(post("/admin/park/" + parkSlug + "/update")
+        this.mockMvc.perform(put("/admin/park/" + parkSlug)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonData))
@@ -153,7 +154,7 @@ class AdminControllerTest {
 
         when(userService.addAdminToPark(parkSlug, "newAdmin@email.com")).thenReturn("success");
         when(parkSecurity.isParkAdmin(any(), eq(parkSlug))).thenReturn(true);
-        this.mockMvc.perform(post("/admin/park/" + parkSlug + "/addAdmin")
+        this.mockMvc.perform(post("/admin/park/" + parkSlug + "/admins")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("newAdmin@email.com"))
@@ -171,7 +172,7 @@ class AdminControllerTest {
 
         when(userService.addAdminToPark(parkSlug, "newAdmin@email.com")).thenReturn("success");
         when(parkSecurity.isParkAdmin(any(), eq(parkSlug))).thenReturn(false);
-        this.mockMvc.perform(post("/admin/park/" + parkSlug + "/addAdmin")
+        this.mockMvc.perform(post("/admin/park/" + parkSlug + "/admins")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("newAdmin@email.com"))
@@ -188,7 +189,7 @@ class AdminControllerTest {
 
         when(userService.addAdminToPark(parkSlug, "newAdmin@email.com")).thenReturn("failure");
         when(parkSecurity.isParkAdmin(any(), eq(parkSlug))).thenReturn(true);
-        this.mockMvc.perform(post("/admin/park/" + parkSlug + "/addAdmin")
+        this.mockMvc.perform(post("/admin/park/" + parkSlug + "/admins")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("newAdmin@email.com"))

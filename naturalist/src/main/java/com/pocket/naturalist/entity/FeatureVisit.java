@@ -1,8 +1,6 @@
 package com.pocket.naturalist.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,35 +27,20 @@ public class FeatureVisit {
     Feature feature;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_park_stat", nullable = false)
+    @JoinColumn(name = "user_park_stat_id", nullable = false)
     UserParkStat userParkStat;
 
-    @Column(name="visits")
-    List<LocalDateTime> visits;
+    @Column(name="visit_time", nullable = false)
+    LocalDateTime visitTime; 
 
 
     public FeatureVisit(Feature feature, UserParkStat userParkStat){
         this.feature = feature;
         this.userParkStat = userParkStat;
-        this.visits = new ArrayList<>();
-        this.visits.add(LocalDateTime.now());
+        this.visitTime = LocalDateTime.now();
     }
 
-    
-    public List<LocalDateTime> getVisits() {
-        return visits;
-    }
-
-    public void setVisits(List<LocalDateTime> visits) {
-        this.visits = visits;
-    }
-
-    public void visit(){
-        this.visits.add(LocalDateTime.now());
-    }
-
-    public LocalDateTime latestVisit(){
-        return this.visits.getLast();
+    public FeatureVisit() {
     }
 
     public Feature getFeature() {
@@ -86,6 +69,14 @@ public class FeatureVisit {
 
     public void setUserParkStat(UserParkStat userParkStat) {
         this.userParkStat = userParkStat;
+    }
+
+    public LocalDateTime getVisitTime() {
+        return visitTime;
+    }
+
+    public void setVisitTime(LocalDateTime visitTime) {
+        this.visitTime = visitTime;
     }
 
 
