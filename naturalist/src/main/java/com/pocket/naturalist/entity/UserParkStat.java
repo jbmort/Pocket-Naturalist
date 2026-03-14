@@ -55,7 +55,7 @@ public class UserParkStat {
   
 
     @OneToMany(mappedBy = "userParkStat", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FeatureVisit> featuresVisited;
+    private List<FeatureVisit> featuresVisited = new ArrayList<>();
 
     public UserParkStat(User user, Park park) {
         this.user = user;
@@ -65,6 +65,12 @@ public class UserParkStat {
     public void addPoints(int points) {
         this.currentYearPoints += points;
         this.lifetimePoints += points;
+    }
+
+    public void visitFeature(Feature feature){
+        FeatureVisit visit = new FeatureVisit(feature, this);
+        featuresVisited.add(visit);
+        this.addPoints(feature.getPointValue());
     }
 
     public void resetCurrentYearPoints() {

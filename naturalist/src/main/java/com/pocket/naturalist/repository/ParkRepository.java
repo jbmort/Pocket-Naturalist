@@ -45,6 +45,6 @@ public interface ParkRepository extends JpaRepository<Park, Long> {
             AND ST_DWithin(f.location, :userLocation, 0.001)
         )
         """, nativeQuery = true)
-    public boolean isPointNearFeature(Point userLocation, String urlSlug, int featureId);
+    public boolean isPointNearFeature(Point userLocation, String urlSlug, long featureId);
     
 }

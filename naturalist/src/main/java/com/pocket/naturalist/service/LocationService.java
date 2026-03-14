@@ -8,6 +8,6 @@ public interface LocationService {
 
     boolean isPointInsideParkBoundaries(Point userLocation, String urlSlug);
 
-    boolean isPointNearFeature(Point userLocation, String urlSlug, int featureId);
+    boolean isPointNearFeature(Point userLocation, String urlSlug, long featureId);
     
 }

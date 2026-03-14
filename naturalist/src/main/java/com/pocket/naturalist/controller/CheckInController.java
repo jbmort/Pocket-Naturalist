@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pocket.naturalist.dto.CheckInResponseDTO;
 import com.pocket.naturalist.dto.CheckInResponseFeatureDTO;
-import com.pocket.naturalist.entity.User;
 import com.pocket.naturalist.service.GameificationService;
 import com.pocket.naturalist.service.LocationService;
 import com.pocket.naturalist.service.UserService;
@@ -50,7 +49,7 @@ public class CheckInController {
 
     @PostMapping("/{parkSlug}/feature/{featureId}")
     public ResponseEntity<CheckInResponseFeatureDTO> checkInFeature(@PathVariable String parkSlug,
-                                                            @PathVariable int featureId,
+                                                            @PathVariable long featureId,
                                                             @RequestBody Point location,
                                                             Authentication authentication){
         
@@ -58,11 +57,9 @@ public class CheckInController {
 
         CheckInResponseFeatureDTO responseDTO = new CheckInResponseFeatureDTO(parkSlug, featureId, isNearFeature);
 
-        // add user service method to verify that the user hasnt checked in that day and award points 
-
         if(isNearFeature){
             String username = authentication.getName();
-            userService.awardPointsForFeatureCheckIn(username, featureId, parkSlug);
+            gameificationService.awardPointsForFeatureCheckIn(username, featureId, parkSlug);
         }
         
         return ResponseEntity.ok(responseDTO);

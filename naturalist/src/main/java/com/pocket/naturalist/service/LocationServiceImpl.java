@@ -19,7 +19,7 @@ public class LocationServiceImpl implements LocationService {
 
 
     @Override
-    public boolean isPointNearFeature(Point userLocation, String urlSlug, int featureId) {
+    public boolean isPointNearFeature(Point userLocation, String urlSlug, long featureId) {
         return parkRepository.isPointNearFeature(userLocation, urlSlug, featureId);
     }
 

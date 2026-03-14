@@ -164,8 +164,13 @@ public class GameificationServiceImpl implements GameificationService{
 	}
 
     @Override
-    public void awardPointsForFeatureCheckIn(String username, int featureId, String parkSlug) {
-        
+    public void awardPointsForFeatureCheckIn(String username, long featureId, String parkSlug) {
+        User user = userRepository.findByUsername(username).orElseThrow();
+        Feature feature = featureRepository.findById(featureId).orElseThrow();
+
+        user.getParkStat(parkSlug).orElseThrow().visitFeature(feature);
+
+        userRepository.save(user);
     }
     
 }

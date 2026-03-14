@@ -173,9 +173,11 @@ class GameificationServiceTest {
         Feature feature = new Feature("test feature", null, 1, park);
         feature.setId(1);
         park.addFeature(feature);
+
+        mockUser.setUserParkStats(List.of(new UserParkStat(mockUser, park)));
         
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(mockUser));
-        when(parkRepository.findByUrlSlug("park1")).thenReturn(Optional.of(park));
+        when(featureRepository.findById(1L)).thenReturn(Optional.of(feature));
         
         gameificationService.awardPointsForFeatureCheckIn(username, 1, park.getUrlSlug());
 
