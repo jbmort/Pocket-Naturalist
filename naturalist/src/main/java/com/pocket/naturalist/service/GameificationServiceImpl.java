@@ -162,5 +162,10 @@ public class GameificationServiceImpl implements GameificationService{
        
 
 	}
+
+    @Override
+    public void awardPointsForFeatureCheckIn(String username, int featureId, String parkSlug) {
+        
+    }
     
 }

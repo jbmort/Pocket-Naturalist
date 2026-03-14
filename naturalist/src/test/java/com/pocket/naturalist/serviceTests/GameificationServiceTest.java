@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
@@ -159,6 +161,29 @@ class GameificationServiceTest {
 
         assertEquals(false, badgeAwarded);
         assertEquals(2, user.getBadges().size());
+    }
+
+    @Test
+    void shouldAwardPointsForFeatureCheckIn(){
+        String username = "testUser";
+        User mockUser = new User();
+        mockUser.setUsername(username);
+
+        Park park = new Park("park1");
+        Feature feature = new Feature("test feature", null, 1, park);
+        feature.setId(1);
+        park.addFeature(feature);
+        
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(mockUser));
+        when(parkRepository.findByUrlSlug("park1")).thenReturn(Optional.of(park));
+        
+        gameificationService.awardPointsForFeatureCheckIn(username, 1, park.getUrlSlug());
+
+        verify(userRepository).save(argThat(user -> 
+            user.getParkStat(park.getUrlSlug()).get().getLifetimePoints() == 1 &&
+            user.getParkStat(park.getUrlSlug()).get().getFeaturesVisited().size() == 1 &&
+            user.getParkStat(park.getUrlSlug()).get().getFeaturesVisited().get(0).getFeature().getName().equals("test feature")
+        ));
     }
 
     

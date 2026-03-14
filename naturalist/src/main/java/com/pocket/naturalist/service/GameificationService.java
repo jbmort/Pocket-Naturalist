@@ -13,5 +13,7 @@ public interface GameificationService {
     void awardFeaturePoints(String username, String parkSlug, long featureId);
 
     boolean checkForMilestoneBadgeAward(User user, Park park);
+
+    void awardPointsForFeatureCheckIn(String username, int featureId, String parkSlug);
     
 }
