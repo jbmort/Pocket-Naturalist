@@ -27,12 +27,11 @@ public class UserServiceImpl implements UserService {
     GameificationService gameficationService;
 
     public UserServiceImpl(
-        JwtService jwtService,
-        UserRepository userRepository,
-        ParkRepository parkRepository,
-        PasswordEncoder passwordEncoder,
-        GameificationService gameificationService
-    ){
+            JwtService jwtService,
+            UserRepository userRepository,
+            ParkRepository parkRepository,
+            PasswordEncoder passwordEncoder,
+            GameificationService gameificationService) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -40,18 +39,16 @@ public class UserServiceImpl implements UserService {
         this.gameficationService = gameificationService;
     }
 
-
     @Override
     public UserDataDto getUserInfo(String userName) {
         User user = userRepository.findByUsername(userName).orElseThrow();
 
         int totalPoints = user.getUserParkStats().stream()
-                                                .mapToInt(UserParkStat::getLifetimePoints)
-                                                .sum();
+                .mapToInt(UserParkStat::getLifetimePoints)
+                .sum();
 
         return new UserDataDto(userName, totalPoints, user.getBadges());
     }
-
 
     @Override
     public JWTAuthResponse registerNewUser(RegistrationDTO newUser) {
@@ -74,29 +71,26 @@ public class UserServiceImpl implements UserService {
         return new JWTAuthResponse(token);
     }
 
-
     @Override
     public String addAdminToPark(String parkSlug, String newAdminUsername) {
 
         User newAdmin = userRepository.findByUsername(newAdminUsername).orElseThrow();
         Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow();
 
-        if(!newAdmin.getRole().equals(Role.ADMIN)){
+        if (!newAdmin.getRole().equals(Role.ADMIN)) {
             newAdmin.setRole(Role.ADMIN);
         }
         newAdmin.addManagedPark(park);
         User updatedUser = userRepository.save(newAdmin);
 
-        if(updatedUser.getManagedParks().contains(park)
-            && !updatedUser.getRole().equals(Role.ADMIN)
-            && updatedUser.getUsername().equals(newAdmin.getUsername())){
-            
+        if (updatedUser.getManagedParks().contains(park)
+                && !updatedUser.getRole().equals(Role.ADMIN)
+                && updatedUser.getUsername().equals(newAdmin.getUsername())) {
+
             return "success";
-            }
-        else{
+        } else {
             return "failure";
         }
     }
 
-    
 }

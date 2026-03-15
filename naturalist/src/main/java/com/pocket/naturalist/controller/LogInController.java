@@ -26,38 +26,34 @@ public class LogInController {
     private final UserService userService;
 
     public LogInController(
-        AuthenticationManager authenticationManager,
-        JwtService jwtService,
-        UserService userService
-    ){
+            AuthenticationManager authenticationManager,
+            JwtService jwtService,
+            UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.userService = userService;
     }
 
-
     @PostMapping("/login")
-    public ResponseEntity<JWTAuthResponse> authenticateUser(@RequestBody LoginDTO creds){
+    public ResponseEntity<JWTAuthResponse> authenticateUser(@RequestBody LoginDTO creds) {
         JWTAuthResponse jwt = createUserJWT(creds.username(), creds.password());
 
         return ResponseEntity.ok(jwt);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<JWTAuthResponse> registerUser(@RequestBody RegistrationDTO newUser){
+    public ResponseEntity<JWTAuthResponse> registerUser(@RequestBody RegistrationDTO newUser) {
 
         JWTAuthResponse jwt = userService.registerNewUser(newUser);
-    
+
         return ResponseEntity.ok(jwt);
     }
 
-    private JWTAuthResponse createUserJWT(String userName, String password){
-         Authentication authentication = authenticationManager.authenticate(
+    private JWTAuthResponse createUserJWT(String userName, String password) {
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         userName,
-                        password
-                )
-            );
+                        password));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -66,5 +62,4 @@ public class LogInController {
         return new JWTAuthResponse(token);
     }
 
-    
 }

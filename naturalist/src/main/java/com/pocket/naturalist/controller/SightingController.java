@@ -23,8 +23,7 @@ public class SightingController {
     }
 
     @GetMapping("/{parkSlug}")
-    public ResponseEntity<SightingMapDTO> getSightingsForPark(@PathVariable String parkSlug
-    ) {
+    public ResponseEntity<SightingMapDTO> getSightingsForPark(@PathVariable String parkSlug) {
 
         SightingMapDTO sightings = sightingService.getSightingsForPark(parkSlug);
 
@@ -33,14 +32,13 @@ public class SightingController {
 
     @PostMapping("/{parkSlug}")
     public ResponseEntity<Void> createSighting(@PathVariable String parkSlug,
-                                                @RequestBody SightingReportDTO sightingData) 
-    {
+            @RequestBody SightingReportDTO sightingData) {
         String animalName = sightingData.animalName();
         Point locationOfAnimal = sightingData.locationOfAnimal();
         Point locationOfReport = sightingData.locationOfReport();
         boolean created = sightingService.createSighting(animalName, locationOfAnimal, locationOfReport, parkSlug);
 
-        if(!created) {
+        if (!created) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();

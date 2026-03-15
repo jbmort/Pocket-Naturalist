@@ -23,19 +23,19 @@ public class BadgeServiceImpl implements BadgeService {
     private String milestoneFiveURL = "url";
 
     private Map<Integer, String> milestoneURLs = Map.of(
-        10, milestoneOneURL,
-        100, milestoneTwoURL,
-        250, milestoneThreeURL,
-        500, milestoneFourURL,
-        1000, milestoneFiveURL
-    );
+            10, milestoneOneURL,
+            100, milestoneTwoURL,
+            250, milestoneThreeURL,
+            500, milestoneFourURL,
+            1000, milestoneFiveURL);
 
     /**
      * Creates a milestone badge based on the provided name and milestone.
-     * @param parkName the name of the park for which the badge is being created
+     * 
+     * @param parkName  the name of the park for which the badge is being created
      * @param milestone the milestone that the badge represents (e.g. 10 visits)
      * @return a new Badge object with the appropriate name and URL
-    */
+     */
     @Override
     public Badge createMilestoneBadge(String parkName, int milestone) {
         String badgeURL = milestoneURLs.get(milestone);
@@ -47,7 +47,7 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Override
     public Set<Integer> getBadgeMilestones() {
-     return milestoneURLs.keySet();
+        return milestoneURLs.keySet();
     }
-    
+
 }

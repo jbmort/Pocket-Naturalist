@@ -15,16 +15,16 @@ public class UserAccountController {
 
     UserService userService;
 
-    public UserAccountController(UserService userService){
+    public UserAccountController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/data")
-    public ResponseEntity<UserDataDto> getUserInfo(Authentication auth){
+    public ResponseEntity<UserDataDto> getUserInfo(Authentication auth) {
         String userName = auth.getName();
 
         UserDataDto data = userService.getUserInfo(userName);
         return ResponseEntity.ok(data);
     }
-    
+
 }

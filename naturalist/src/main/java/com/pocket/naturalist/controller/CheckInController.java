@@ -23,46 +23,45 @@ public class CheckInController {
     UserService userService;
     GameificationService gameificationService;
 
-    public CheckInController(LocationService locationService, UserService userService, GameificationService gameificationService){
+    public CheckInController(LocationService locationService, UserService userService,
+            GameificationService gameificationService) {
         this.locationService = locationService;
         this.userService = userService;
         this.gameificationService = gameificationService;
     }
 
-
     @PostMapping("/{parkSlug}")
     public ResponseEntity<CheckInResponseDTO> checkIn(@PathVariable String parkSlug,
-                                                        @RequestBody Point location,
-                                                    Authentication authentication)
-    {
+            @RequestBody Point location,
+            Authentication authentication) {
         boolean isInside = locationService.isPointInsideParkBoundaries(location, parkSlug);
         CheckInResponseDTO responseDTO = new CheckInResponseDTO(parkSlug, isInside);
 
-        if(isInside){
+        if (isInside) {
             String username = authentication.getName();
             gameificationService.addCheckInPointsForUser(username, parkSlug);
         }
 
         return ResponseEntity.ok(responseDTO);
-        
+
     }
 
     @PostMapping("/{parkSlug}/feature/{featureId}")
     public ResponseEntity<CheckInResponseFeatureDTO> checkInFeature(@PathVariable String parkSlug,
-                                                            @PathVariable long featureId,
-                                                            @RequestBody Point location,
-                                                            Authentication authentication){
-        
+            @PathVariable long featureId,
+            @RequestBody Point location,
+            Authentication authentication) {
+
         boolean isNearFeature = locationService.isPointNearFeature(location, parkSlug, featureId);
 
         CheckInResponseFeatureDTO responseDTO = new CheckInResponseFeatureDTO(parkSlug, featureId, isNearFeature);
 
-        if(isNearFeature){
+        if (isNearFeature) {
             String username = authentication.getName();
             gameificationService.awardPointsForFeatureCheckIn(username, featureId, parkSlug);
         }
-        
+
         return ResponseEntity.ok(responseDTO);
-    
+
     }
 }

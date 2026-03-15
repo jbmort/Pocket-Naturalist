@@ -21,14 +21,14 @@ public class AdminController {
     private final ParkService parkService;
     private final UserService userService;
 
-    AdminController(ParkService parkService, UserService userService){
+    AdminController(ParkService parkService, UserService userService) {
         this.parkService = parkService;
         this.userService = userService;
     }
 
     @PreAuthorize("@parkSecurity.isParkAdmin(authentication, #parkSlug)")
     @GetMapping("/park/{parkSlug}")
-    public ResponseEntity<ParkDataDTO> getAdminParkData(@PathVariable String parkSlug){
+    public ResponseEntity<ParkDataDTO> getAdminParkData(@PathVariable String parkSlug) {
 
         ParkDataDTO data = parkService.getAdminParkData(parkSlug);
 
@@ -38,14 +38,14 @@ public class AdminController {
     @PreAuthorize("@parkSecurity.isParkAdmin(authentication, #parkSlug)")
     @PutMapping("/park/{parkSlug}")
     public ResponseEntity<ParkDataDTO> updateParkData(@PathVariable String parkSlug,
-                                                        @RequestBody ParkDataDTO data){
+            @RequestBody ParkDataDTO data) {
         ParkDataDTO updatedData = parkService.updateParkData(parkSlug, data);
         return ResponseEntity.ok(updatedData);
     }
 
     @PreAuthorize("@parkSecurity.isParkAdmin(authentication, #parkSlug)")
     @PostMapping("/park/{parkSlug}/admins")
-    public ResponseEntity<String> addAdminToPark(@PathVariable String parkSlug, @RequestBody String newAdminUsername){
+    public ResponseEntity<String> addAdminToPark(@PathVariable String parkSlug, @RequestBody String newAdminUsername) {
         String result = userService.addAdminToPark(parkSlug, newAdminUsername);
         return ResponseEntity.status(result.equals("success") ? 201 : 400).body(result);
     }

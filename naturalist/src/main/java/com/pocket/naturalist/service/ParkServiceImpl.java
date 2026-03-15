@@ -8,16 +8,18 @@ import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.repository.ParkRepository;
 
 @Service
-public class ParkServiceImpl implements ParkService{
+public class ParkServiceImpl implements ParkService {
 
     ParkRepository parkRepository;
 
-    public ParkServiceImpl(ParkRepository parkRepository){
+    public ParkServiceImpl(ParkRepository parkRepository) {
         this.parkRepository = parkRepository;
     }
 
     /**
-     * Retrieves basic data needed to load the parks main page when a user first visits
+     * Retrieves basic data needed to load the parks main page when a user first
+     * visits
+     * 
      * @param parkSlug
      * @return ParkDataDTO
      */
@@ -25,18 +27,17 @@ public class ParkServiceImpl implements ParkService{
     public ParkDataDTO getMainPageParkData(String parkSlug) {
         Optional<Park> optionalPark = parkRepository.findByUrlSlug(parkSlug);
 
-        if(optionalPark.isPresent()){
+        if (optionalPark.isPresent()) {
             Park park = optionalPark.get();
             return new ParkDataDTO(park.getName(), park.getBoundaryList(), park.getFeatures(), park.getAnimals());
-        }
-        else{
+        } else {
             return null;
         }
     }
 
-
     /**
      * Retrives park data to populate the park admin dashboard
+     * 
      * @param parkSlug
      * @return ParkDataDTO
      */
@@ -45,15 +46,15 @@ public class ParkServiceImpl implements ParkService{
         Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow();
 
         return new ParkDataDTO(
-                                park.getName(), 
-                                park.getBoundaryList(), 
-                                park.getFeatures(),  
-                                park.getAnimals()
-                            );
+                park.getName(),
+                park.getBoundaryList(),
+                park.getFeatures(),
+                park.getAnimals());
     }
 
     /**
      * Applies updates from the admin to the associated park
+     * 
      * @param urlSlug
      * @param updatedData
      */
@@ -70,11 +71,10 @@ public class ParkServiceImpl implements ParkService{
         parkRepository.save(park);
 
         return new ParkDataDTO(
-                                park.getName(), 
-                                park.getBoundaryList(), 
-                                park.getFeatures(),  
-                                park.getAnimals()
-                            );
+                park.getName(),
+                park.getBoundaryList(),
+                park.getFeatures(),
+                park.getAnimals());
     }
-    
+
 }

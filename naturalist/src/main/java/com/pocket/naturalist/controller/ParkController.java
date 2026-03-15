@@ -16,24 +16,20 @@ public class ParkController {
 
     ParkService parkService;
 
-    public ParkController(ParkService parkService){
+    public ParkController(ParkService parkService) {
         this.parkService = parkService;
     }
 
     @GetMapping("/{parkSlug}")
-    public ResponseEntity<ParkDataDTO> getParkData(@PathVariable String parkSlug){
+    public ResponseEntity<ParkDataDTO> getParkData(@PathVariable String parkSlug) {
 
         ParkDataDTO parkData = parkService.getMainPageParkData(parkSlug);
-        if(parkData != null){
-                    return ResponseEntity.ok(parkData);
-        }
-        else{
+        if (parkData != null) {
+            return ResponseEntity.ok(parkData);
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
     }
 
-
-
-    
 }

@@ -1,6 +1,5 @@
 package com.pocket.naturalist.service;
 
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +27,7 @@ public class SightingServiceImpl implements SightingService {
 
     /**
      * Logs a user sighting for a specific animal at a park
+     * 
      * @param animalName
      * @param locationOfAnimal
      * @param locationOfReport
@@ -43,7 +43,6 @@ public class SightingServiceImpl implements SightingService {
         Optional<Park> optionalPark = parkRepository.findByUrlSlug(parkSlug);
         if (animal != null && optionalPark.isPresent()) {
             Sighting sighting = new Sighting(animal, locationOfAnimal, locationOfReport, optionalPark.orElseThrow());
-            
 
             sightingsRepository.save(sighting);
             isCreated = true;
@@ -53,10 +52,12 @@ public class SightingServiceImpl implements SightingService {
 
     /**
      * Retrieves all animal sightings at the park
+     * 
      * @param parkSlug
      * @return SightingMapDTO
      * 
-     * @apiNote currently returns all sightings but will eventually limit it to a certain amount or only the most recent
+     * @apiNote currently returns all sightings but will eventually limit it to a
+     *          certain amount or only the most recent
      */
     @Override
     public SightingMapDTO getSightingsForPark(String parkSlug) {
@@ -67,11 +68,12 @@ public class SightingServiceImpl implements SightingService {
         if (optionalPark.isPresent()) {
 
             Park park = optionalPark.orElseThrow();
-            boolean highVolumeSubmission = sightingsRepository.countSightingsInLastTwoHours(park, LocalDateTime.now().minusHours(2)) > 200;
+            boolean highVolumeSubmission = sightingsRepository.countSightingsInLastTwoHours(park,
+                    LocalDateTime.now().minusHours(2)) > 200;
 
-             sightings = highVolumeSubmission ?
-                        sightingsRepository.findRecentSightingsByPark(park) :
-                        sightingsRepository.findSightingsForToday(park, LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0));
+            sightings = highVolumeSubmission ? sightingsRepository.findRecentSightingsByPark(park)
+                    : sightingsRepository.findSightingsForToday(
+                            park, LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0));
 
             for (Animal animal : park.getAnimals()) {
                 List<Point> animalLocations = sightings.stream()
@@ -85,7 +87,6 @@ public class SightingServiceImpl implements SightingService {
         }
         return new SightingMapDTO(parkSlug, animalLocationsDTOs);
 
-
     }
-    
+
 }
