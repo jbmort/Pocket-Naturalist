@@ -1,6 +1,7 @@
 package com.pocket.naturalist.service;
 
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -66,7 +67,11 @@ public class SightingServiceImpl implements SightingService {
         if (optionalPark.isPresent()) {
 
             Park park = optionalPark.orElseThrow();
-            sightings = sightingsRepository.findAllByPark(park);
+            boolean highVolumeSubmission = sightingsRepository.countSightingsInLastTwoHours(park, LocalDateTime.now().minusHours(2)) > 200;
+
+             sightings = highVolumeSubmission ?
+                        sightingsRepository.findRecentSightingsByPark(park) :
+                        sightingsRepository.findSightingsForToday(park, LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0));
 
             for (Animal animal : park.getAnimals()) {
                 List<Point> animalLocations = sightings.stream()
