@@ -17,6 +17,7 @@ import com.pocket.naturalist.dto.SightingMapDTO;
 import com.pocket.naturalist.repository.AnimalRepository;
 import com.pocket.naturalist.repository.ParkRepository;
 import com.pocket.naturalist.repository.SightingsRepository;
+import com.pocket.naturalist.exception.ResourceNotFoundException;
 
 @Service
 public class SightingServiceImpl implements SightingService {
@@ -62,12 +63,9 @@ public class SightingServiceImpl implements SightingService {
     @Override
     public SightingMapDTO getSightingsForPark(String parkSlug) {
         List<Sighting> sightings;
-        Optional<Park> optionalPark = parkRepository.findByUrlSlug(parkSlug);
+        Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow(() -> new ResourceNotFoundException("Park not found!"));
         List<AnimalLocationsDTO> animalLocationsDTOs = new ArrayList<>();
 
-        if (optionalPark.isPresent()) {
-
-            Park park = optionalPark.orElseThrow();
             boolean highVolumeSubmission = sightingsRepository.countSightingsInLastTwoHours(park,
                     LocalDateTime.now().minusHours(2)) > 200;
 
@@ -84,7 +82,6 @@ public class SightingServiceImpl implements SightingService {
                 AnimalLocationsDTO animalLocationsDTO = new AnimalLocationsDTO(animal.getCommonName(), animalLocations);
                 animalLocationsDTOs.add(animalLocationsDTO);
             }
-        }
         return new SightingMapDTO(parkSlug, animalLocationsDTOs);
 
     }
