@@ -17,6 +17,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -24,7 +26,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "parks")
 public class Park {
-    
+
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
     long id;
@@ -47,31 +49,32 @@ public class Park {
     @OneToMany(mappedBy = "park", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Feature> features = new ArrayList<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
     Set<Animal> animals = new HashSet<>();
+
+    @ManyToMany(mappedBy = "managedParks", fetch = FetchType.LAZY)
+    private List<User> managers = new ArrayList<>();
 
     public Park(String name) {
         this.name = name;
         this.urlSlug = createSlug(name);
     }
 
-   public Park(String name, List<Polygon> boundaries) {
-         this.name = name;
-         this.urlSlug = createSlug(name);
-         this.boundaryList = boundaries;
-         this.mapCenter = geoUtils.calculateCenter(boundaries);
+    public Park(String name, List<Polygon> boundaries) {
+        this.name = name;
+        this.urlSlug = createSlug(name);
+        this.boundaryList = boundaries;
+        this.mapCenter = geoUtils.calculateCenter(boundaries);
 
-   }
+    }
 
     private String createSlug(String parkName) {
         String slug = "General-Park";
-        if(!parkName.isEmpty()){
+        if (!parkName.isEmpty()) {
             slug = parkName.toLowerCase().trim().replaceAll("[^a-zA-Z0-9\\s]", "").replaceAll("\\s+", "-");
         }
         return slug;
     }
-
-    
 
     public long getId() {
         return id;
@@ -107,7 +110,7 @@ public class Park {
     }
 
     public void addBoundary(Polygon boundary) {
-        if(this.boundaryList == null){
+        if (this.boundaryList == null) {
             this.boundaryList = new ArrayList<>();
         }
         this.boundaryList.add(boundary);
@@ -145,16 +148,26 @@ public class Park {
         this.features = features;
     }
 
-    public void addFeature(Feature feature){
+    public void addFeature(Feature feature) {
         this.features.add(feature);
     }
 
-    public void updatePark(ParkDataDTO updatedData){
+    
+
+    public void updatePark(ParkDataDTO updatedData) {
         this.setName(updatedData.parkName());
         this.setBoundaryList(updatedData.boundaries());
         this.setFeatures(updatedData.features());
         this.setAnimals(updatedData.animals());
         this.setMapCenter(geoUtils.calculateCenter(updatedData.boundaries()));
 
+    }
+
+    public List<User> getManagers() {
+        return managers;
+    }
+
+    public void setManagers(List<User> managers) {
+        this.managers = managers;
     }
 }
