@@ -19,8 +19,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -48,9 +46,8 @@ class SightingControllerTest {
     private Park park;
 
     @Autowired
-    private MockMvc mockMvc; // USE THIS ONLY
+    private MockMvc mockMvc; 
 
-    private ObjectMapper objectMapper; // LET SPRING INJECT THE CONFIGURED MAPPER
 
     // --- SECURITY MOCKS ---
     @MockitoBean private JwtService jwtService;
@@ -69,8 +66,6 @@ class SightingControllerTest {
         animal = new Animal("Bison bison", "Bison", "Large herbivorous mammal native to North America.");
         locationOfAnimal = geometryFactory.createPoint(new Coordinate(-110.5885, 44.4279));
         park = new Park("Yellowstone");
-        // this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-
     }
 
 
