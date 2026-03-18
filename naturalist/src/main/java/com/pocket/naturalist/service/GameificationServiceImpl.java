@@ -3,8 +3,6 @@ package com.pocket.naturalist.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -15,6 +13,7 @@ import com.pocket.naturalist.entity.Feature;
 import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.entity.User;
 import com.pocket.naturalist.entity.UserParkStat;
+import com.pocket.naturalist.exception.ResourceNotFoundException;
 import com.pocket.naturalist.repository.FeatureRepository;
 import com.pocket.naturalist.repository.ParkRepository;
 import com.pocket.naturalist.repository.UserParkStatRepository;
@@ -61,55 +60,48 @@ public class GameificationServiceImpl implements GameificationService {
      */
     @Override
     public void addCheckInPointsForUser(String username, String parkSlug) {
-        Optional<User> user = userRepository.findByUsername(username);
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(
+                        "User with username '%s' not found.", username)));
 
-        Optional<Park> optionalPark = parkRepository.findByUrlSlug(parkSlug);
+        Park park = parkRepository.findByUrlSlug(parkSlug)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(
+                        "Park with slug '%s' not found.", parkSlug)));
 
-        if (optionalPark.isPresent()) {
-            Park park = optionalPark.get();
+        List<UserParkStat> currentStats = currentUser.getUserParkStats();
 
-            if (user.isPresent()) {
-                User currentUser = user.orElseThrow();
+        boolean alreadyVisited = currentUser.getParkStat(parkSlug).isPresent();
 
-                List<UserParkStat> currentStats = currentUser.getUserParkStats();
+        UserParkStat currentStat;
 
-                boolean alreadyVisited = currentUser.getParkStat(parkSlug).isPresent();
+        if (alreadyVisited) {
+            // Ensures last check in was the previous day to prevent multiple check ins per
+            // day
+            currentStat = currentUser.getParkStat(parkSlug).orElseThrow();
+            if (currentStat.getLastVisited().toLocalDate().isAfter(LocalDateTime.now().toLocalDate())) {
+                currentStat.addPoints(CHECK_IN_POINTS);
+                List<UserParkStat> newStats = currentStats.stream()
+                        .filter(s -> !s.getPark().equals(park))
+                        .collect(Collectors.toCollection(ArrayList::new));
+                newStats.add(currentStat);
+                currentUser.setUserParkStats(newStats);
+                checkForMilestoneBadgeAward(currentUser, park);
 
-                UserParkStat currentStat;
-
-                if (alreadyVisited) {
-                    // Ensures last check in was the previous day to prevent multiple check ins per
-                    // day
-                    currentStat = currentUser.getParkStat(parkSlug).orElseThrow();
-                    if (currentStat.getLastVisited().toLocalDate().isAfter(LocalDateTime.now().toLocalDate())) {
-                        currentStat.addPoints(CHECK_IN_POINTS);
-                        List<UserParkStat> newStats = currentStats.stream()
-                                .filter(s -> !s.getPark().equals(park))
-                                .collect(Collectors.toCollection(ArrayList::new));
-                        newStats.add(currentStat);
-                        currentUser.setUserParkStats(newStats);
-                        checkForMilestoneBadgeAward(currentUser, park);
-
-                    } else {
-                        return;
-                    }
-                }
-                // creates a new stat for the first time visiting a park
-                else {
-                    currentStat = new UserParkStat(currentUser, park);
-                    currentStat.addPoints(CHECK_IN_POINTS);
-                    currentStat.setLastVisited(LocalDateTime.now());
-                    currentUser.addUserParkStat(currentStat);
-                }
-
-                userParkStatRepository.save(currentStat);
-                userRepository.save(currentUser);
             } else {
-                logger.info("User not found");
+                return;
             }
-        } else {
-            logger.log(Level.INFO, "No park found for {}", parkSlug);
         }
+        // creates a new stat for the first time visiting a park
+        else {
+            currentStat = new UserParkStat(currentUser, park);
+            currentStat.addPoints(CHECK_IN_POINTS);
+            currentStat.setLastVisited(LocalDateTime.now());
+            currentUser.addUserParkStat(currentStat);
+        }
+
+        userParkStatRepository.save(currentStat);
+        userRepository.save(currentUser);
+
     }
 
     /**
@@ -122,13 +114,18 @@ public class GameificationServiceImpl implements GameificationService {
      */
     public void awardFeaturePoints(String username, String parkSlug, long featureId) {
 
-        User user = userRepository.findByUsername(username).orElseThrow();
-        Feature feature = featureRepository.findById(featureId).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException(String.format(
+                        "User with username '%s' not found.", username)));
+        Feature feature = featureRepository.findById(featureId).orElseThrow(() -> new ResourceNotFoundException(String.format(
+                "Park with slug '%s' not found.", parkSlug
+            )));
         UserParkStat parkStat;
 
         if (user.getParkStat(parkSlug).isPresent()) {
             parkStat = user.getParkStat(parkSlug).orElseThrow();
         } else {
+            // check user into park when it hasnt happened yet before they interact
+            // with the feature
             addCheckInPointsForUser(username, parkSlug);
             parkStat = user.getParkStat(parkSlug).orElseThrow();
         }
@@ -170,8 +167,11 @@ public class GameificationServiceImpl implements GameificationService {
 
     @Override
     public void awardPointsForFeatureCheckIn(String username, long featureId, String parkSlug) {
-        User user = userRepository.findByUsername(username).orElseThrow();
-        Feature feature = featureRepository.findById(featureId).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException(String.format(
+                        "User with username '%s' not found.", username)));
+        Feature feature = featureRepository.findById(featureId).orElseThrow(() -> new ResourceNotFoundException(String.format(
+                "Park with slug '%s' not found.", parkSlug
+            )));
 
         user.getParkStat(parkSlug).orElseThrow().visitFeature(feature);
 

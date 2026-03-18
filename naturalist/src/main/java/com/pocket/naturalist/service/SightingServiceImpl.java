@@ -3,7 +3,6 @@ package com.pocket.naturalist.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
@@ -41,9 +40,11 @@ public class SightingServiceImpl implements SightingService {
         boolean isCreated = false;
 
         Animal animal = animalRepository.findByCommonName(animalName);
-        Optional<Park> optionalPark = parkRepository.findByUrlSlug(parkSlug);
-        if (animal != null && optionalPark.isPresent()) {
-            Sighting sighting = new Sighting(animal, locationOfAnimal, locationOfReport, optionalPark.orElseThrow());
+        Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow(() -> new ResourceNotFoundException(String.format(
+                "Park with slug '%s' not found.", parkSlug
+            )));
+        if (animal != null) {
+            Sighting sighting = new Sighting(animal, locationOfAnimal, locationOfReport, park);
 
             sightingsRepository.save(sighting);
             isCreated = true;
@@ -63,7 +64,9 @@ public class SightingServiceImpl implements SightingService {
     @Override
     public SightingMapDTO getSightingsForPark(String parkSlug) {
         List<Sighting> sightings;
-        Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow(() -> new ResourceNotFoundException("Park not found!"));
+        Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow(() -> new ResourceNotFoundException(String.format(
+                "Park with slug '%s' not found.", parkSlug
+            )));
         List<AnimalLocationsDTO> animalLocationsDTOs = new ArrayList<>();
 
             boolean highVolumeSubmission = sightingsRepository.countSightingsInLastTwoHours(park,

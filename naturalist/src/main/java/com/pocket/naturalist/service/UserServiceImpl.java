@@ -10,6 +10,7 @@ import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.entity.User;
 import com.pocket.naturalist.entity.UserParkStat;
 import com.pocket.naturalist.entity.Enums.Role;
+import com.pocket.naturalist.exception.ResourceNotFoundException;
 import com.pocket.naturalist.repository.ParkRepository;
 import com.pocket.naturalist.repository.UserRepository;
 import com.pocket.naturalist.security.JwtService;
@@ -41,7 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDataDto getUserInfo(String userName) {
-        User user = userRepository.findByUsername(userName).orElseThrow();
+        User user = userRepository.findByUsername(userName).orElseThrow(() -> new ResourceNotFoundException(String.format(
+                "User with username '%s' not found.", userName
+            )));
 
         int totalPoints = user.getUserParkStats().stream()
                 .mapToInt(UserParkStat::getLifetimePoints)
@@ -74,8 +77,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public String addAdminToPark(String parkSlug, String newAdminUsername) {
 
-        User newAdmin = userRepository.findByUsername(newAdminUsername).orElseThrow();
-        Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow();
+        User newAdmin = userRepository.findByUsername(newAdminUsername).orElseThrow(() -> new ResourceNotFoundException(String.format(
+                "User with username '%s' not found.", newAdminUsername
+            )));
+        Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow(() -> new ResourceNotFoundException(String.format(
+                "Park with slug '%s' not found.", parkSlug
+            )));
 
         if (!newAdmin.getRole().equals(Role.ADMIN)) {
             newAdmin.setRole(Role.ADMIN);

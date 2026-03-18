@@ -1,10 +1,10 @@
 package com.pocket.naturalist.service;
 
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.pocket.naturalist.dto.ParkDataDTO;
 import com.pocket.naturalist.entity.Park;
+import com.pocket.naturalist.exception.ResourceNotFoundException;
 import com.pocket.naturalist.repository.ParkRepository;
 
 @Service
@@ -25,14 +25,12 @@ public class ParkServiceImpl implements ParkService {
      */
     @Override
     public ParkDataDTO getMainPageParkData(String parkSlug) {
-        Optional<Park> optionalPark = parkRepository.findByUrlSlug(parkSlug);
+        Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow(() -> new ResourceNotFoundException(String.format(
+                "Park with slug '%s' not found.", parkSlug
+            )));
 
-        if (optionalPark.isPresent()) {
-            Park park = optionalPark.get();
-            return new ParkDataDTO(park.getName(), park.getBoundaryList(), park.getFeatures(), park.getAnimals());
-        } else {
-            return null;
-        }
+        return new ParkDataDTO(park.getName(), park.getBoundaryList(), park.getFeatures(), park.getAnimals());
+       
     }
 
     /**
@@ -43,7 +41,9 @@ public class ParkServiceImpl implements ParkService {
      */
     @Override
     public ParkDataDTO getAdminParkData(String parkSlug) {
-        Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow();
+        Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow(() -> new ResourceNotFoundException(String.format(
+                "Park with slug '%s' not found.", parkSlug
+            )));
 
         return new ParkDataDTO(
                 park.getName(),
@@ -55,14 +55,16 @@ public class ParkServiceImpl implements ParkService {
     /**
      * Applies updates from the admin to the associated park
      * 
-     * @param urlSlug
+     * @param parkSlug
      * @param updatedData
      */
 
     @Override
-    public ParkDataDTO updateParkData(String urlSlug, ParkDataDTO updatedData) {
+    public ParkDataDTO updateParkData(String parkSlug, ParkDataDTO updatedData) {
 
-        Park park = parkRepository.findByUrlSlug(urlSlug).orElseThrow();
+        Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow(() -> new ResourceNotFoundException(String.format(
+                "Park with slug '%s' not found.", parkSlug
+            )));
 
         park.setName(updatedData.parkName());
         park.setBoundaryList(updatedData.boundaries());
