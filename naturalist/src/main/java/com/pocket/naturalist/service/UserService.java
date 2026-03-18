@@ -14,4 +14,6 @@ public interface UserService {
     JWTAuthResponse registerNewUser(RegistrationDTO newUser);
     
     String addAdminToPark(String parkSlug, String newAdminUsername);
+
+    void removeAdminFromPark(String parkSlug, String adminToRemove);
 }

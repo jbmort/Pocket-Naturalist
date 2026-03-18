@@ -100,4 +100,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void removeAdminFromPark(String parkSlug, String adminToRemove) {
+        User user = userRepository.findByUsername(adminToRemove).orElseThrow(() -> new ResourceNotFoundException(
+                                    String.format("User with name '%s' not found.", adminToRemove)));
+        user.getManagedParks().removeIf(park -> park.getUrlSlug().equals(parkSlug));
+        userRepository.save(user);
+    }
+
 }

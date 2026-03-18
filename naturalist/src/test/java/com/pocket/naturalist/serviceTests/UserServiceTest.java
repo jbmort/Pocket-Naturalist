@@ -179,4 +179,47 @@ class UserServiceTest {
 
     }
 
+    @Test
+    void shouldRemoveAdminFromPark() {
+        String username = "adminUser";
+        String parkSlug = "park1";
+        
+        User mockAdmin = new User();
+        mockAdmin.setUsername(username);
+        mockAdmin.setRole(Role.ADMIN);
+        
+        Park park1 = new Park("park1");
+        park1.setUrlSlug("park1");
+        Park park2 = new Park("park2");
+        park2.setUrlSlug("park2");
+        
+        mockAdmin.addManagedPark(park1);
+        mockAdmin.addManagedPark(park2);
+        
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(mockAdmin));
+        when(userRepository.save(any())).thenReturn(mockAdmin);
+        
+        userService.removeAdminFromPark(parkSlug, username);
+        
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(userCaptor.capture());
+        User savedUser = userCaptor.getValue();
+        
+        assertFalse(savedUser.getManagedParks().stream().anyMatch(p -> p.getUrlSlug().equals(parkSlug)));
+        assertTrue(savedUser.getManagedParks().stream().anyMatch(p -> p.getUrlSlug().equals("park2")));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenRemovingAdminFromNonexistentUser() {
+        String username = "ghostAdmin";
+        String parkSlug = "park1";
+        
+        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+        
+        assertThrows(ResourceNotFoundException.class, 
+            () -> userService.removeAdminFromPark(parkSlug, username));
+        
+        verify(userRepository, never()).save(any());
+    }
+
 }

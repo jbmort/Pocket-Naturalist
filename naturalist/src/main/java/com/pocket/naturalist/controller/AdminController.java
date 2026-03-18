@@ -2,6 +2,7 @@ package com.pocket.naturalist.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,6 +50,13 @@ public class AdminController {
     public ResponseEntity<String> addAdminToPark(@PathVariable String parkSlug, @RequestBody String newAdminUsername) {
         String result = userService.addAdminToPark(parkSlug, newAdminUsername);
         return ResponseEntity.status(result.equals("success") ? 201 : 400).body(result);
+    }
+
+    @PreAuthorize("@parkSecurity.isParkAdmin(authentication, #parkSlug)")
+    @DeleteMapping("/park/{parkSlug}/admins")
+    public ResponseEntity<Void> removeAdminFromPark(@PathVariable String parkSlug, @RequestBody String adminToRemove){
+        userService.removeAdminFromPark(parkSlug, adminToRemove);
+        return ResponseEntity.ok().build();
     }
 
 }
