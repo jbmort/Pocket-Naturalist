@@ -56,7 +56,7 @@ public class AdminController {
     @DeleteMapping("/park/{parkSlug}/admins")
     public ResponseEntity<Void> removeAdminFromPark(@PathVariable String parkSlug, @RequestBody String adminToRemove){
         userService.removeAdminFromPark(parkSlug, adminToRemove);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }

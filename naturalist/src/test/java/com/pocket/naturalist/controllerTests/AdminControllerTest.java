@@ -6,12 +6,15 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Set;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+
+import org.hibernate.engine.spi.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.n52.jackson2.datatype.jts.JtsModule;
@@ -198,6 +201,22 @@ class AdminControllerTest {
                 .content("newAdmin@email.com"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("failure"));
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    void shouldRemoveAdminFromPark() throws Exception{
+        User admin = new User();
+        admin.setUsername("newAdmin@email.com");
+        admin.setRole(Role.USER);
+        when(parkSecurity.isParkAdmin(any(), eq(parkSlug))).thenReturn(true);
+
+        this.mockMvc.perform(delete("/admin/park/" + parkSlug + "/admins")
+            .with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("newAdmin@email.com"))
+            .andExpect(status().is2xxSuccessful());
+
     }
 
 
