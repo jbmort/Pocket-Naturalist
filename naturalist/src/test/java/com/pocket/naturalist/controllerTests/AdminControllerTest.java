@@ -26,6 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pocket.naturalist.controller.AdminController;
+import com.pocket.naturalist.dto.AdminParkDataDTO;
 import com.pocket.naturalist.dto.ParkDataDTO;
 import com.pocket.naturalist.entity.Animal;
 import com.pocket.naturalist.entity.Park;
@@ -90,11 +91,12 @@ class AdminControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
     void shouldAllowAdminToRetrieveCurrentParkData() throws Exception{
-        ParkDataDTO data = new ParkDataDTO(
+        AdminParkDataDTO data = new AdminParkDataDTO(
                                 park.getName(), 
                                 park.getBoundaryList(), 
                                 park.getFeatures(),  
-                                park.getAnimals()
+                                park.getAnimals(),
+                                park.getManagers()
                             );
 
         when(parkService.getAdminParkData(parkSlug)).thenReturn(data);
@@ -108,11 +110,12 @@ class AdminControllerTest {
     @Test
     @WithMockUser(username = "hacker", roles = "USER")
     void shouldRejectAccessForNonAdminUser() throws Exception{
-        ParkDataDTO data = new ParkDataDTO(
+        AdminParkDataDTO data = new AdminParkDataDTO(
                                 park.getName(), 
                                 park.getBoundaryList(), 
                                 park.getFeatures(),  
-                                park.getAnimals()
+                                park.getAnimals(),
+                                park.getManagers()
                             );
 
         when(parkService.getAdminParkData(parkSlug)).thenReturn(data);

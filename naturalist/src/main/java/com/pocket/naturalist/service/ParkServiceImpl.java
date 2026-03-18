@@ -2,6 +2,7 @@ package com.pocket.naturalist.service;
 
 import org.springframework.stereotype.Service;
 
+import com.pocket.naturalist.dto.AdminParkDataDTO;
 import com.pocket.naturalist.dto.ParkDataDTO;
 import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.exception.ResourceNotFoundException;
@@ -40,16 +41,17 @@ public class ParkServiceImpl implements ParkService {
      * @return ParkDataDTO
      */
     @Override
-    public ParkDataDTO getAdminParkData(String parkSlug) {
+    public AdminParkDataDTO getAdminParkData(String parkSlug) {
         Park park = parkRepository.findByUrlSlug(parkSlug).orElseThrow(() -> new ResourceNotFoundException(String.format(
                 "Park with slug '%s' not found.", parkSlug
             )));
 
-        return new ParkDataDTO(
+        return new AdminParkDataDTO(
                 park.getName(),
                 park.getBoundaryList(),
                 park.getFeatures(),
-                park.getAnimals());
+                park.getAnimals(),
+                park.getManagers());
     }
 
     /**

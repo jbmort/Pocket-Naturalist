@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pocket.naturalist.dto.AdminParkDataDTO;
 import com.pocket.naturalist.dto.ParkDataDTO;
 import com.pocket.naturalist.service.ParkService;
 import com.pocket.naturalist.service.UserService;
@@ -28,9 +29,9 @@ public class AdminController {
 
     @PreAuthorize("@parkSecurity.isParkAdmin(authentication, #parkSlug)")
     @GetMapping("/park/{parkSlug}")
-    public ResponseEntity<ParkDataDTO> getAdminParkData(@PathVariable String parkSlug) {
+    public ResponseEntity<AdminParkDataDTO> getAdminParkData(@PathVariable String parkSlug) {
 
-        ParkDataDTO data = parkService.getAdminParkData(parkSlug);
+        AdminParkDataDTO data = parkService.getAdminParkData(parkSlug);
 
         return ResponseEntity.ok(data);
     }
