@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +26,7 @@ import com.pocket.naturalist.entity.Park;
 import com.pocket.naturalist.entity.User;
 import com.pocket.naturalist.entity.UserParkStat;
 import com.pocket.naturalist.entity.Enums.Role;
+import com.pocket.naturalist.exception.ResourceNotFoundException;
 import com.pocket.naturalist.repository.ParkRepository;
 import com.pocket.naturalist.repository.UserRepository;
 import com.pocket.naturalist.security.JwtService;
@@ -85,7 +85,7 @@ class UserServiceTest {
         String username = "ghost";
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> userService.getUserInfo(username));
+        assertThrows(ResourceNotFoundException.class, () -> userService.getUserInfo(username));
     }
 
     @Test

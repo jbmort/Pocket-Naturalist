@@ -2,6 +2,8 @@ package com.pocket.naturalist.serviceTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -20,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.pocket.naturalist.dto.ParkDataDTO;
 import com.pocket.naturalist.entity.Animal;
 import com.pocket.naturalist.entity.Park;
+import com.pocket.naturalist.exception.ResourceNotFoundException;
 import com.pocket.naturalist.repository.ParkRepository;
 import com.pocket.naturalist.service.ParkServiceImpl;
 
@@ -67,9 +70,12 @@ class ParkServiceTest {
     void shouldCatchBadParkSlug(){
         when(parkRepository.findByUrlSlug(park.getUrlSlug())).thenReturn(Optional.empty());
 
-        ParkDataDTO serviceResult = parkService.getMainPageParkData(park.getUrlSlug());
-
-        assertEquals(null, serviceResult); 
+        try{
+            parkService.getMainPageParkData(park.getUrlSlug());
+            fail("Expected ResourceNotFoundException to be thrown");
+        } catch(ResourceNotFoundException error){
+            assertEquals("Park with slug '"+park.getUrlSlug() + "' not found.", error.getMessage());
+        }
     }
 
     @Test
