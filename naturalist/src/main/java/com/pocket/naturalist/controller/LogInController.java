@@ -17,6 +17,8 @@ import com.pocket.naturalist.dto.RegistrationDTO;
 import com.pocket.naturalist.security.JwtService;
 import com.pocket.naturalist.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/auth")
 public class LogInController {
@@ -35,14 +37,14 @@ public class LogInController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JWTAuthResponse> authenticateUser(@RequestBody LoginDTO creds) {
+    public ResponseEntity<JWTAuthResponse> authenticateUser(@RequestBody @Valid LoginDTO creds) {
         JWTAuthResponse jwt = createUserJWT(creds.username(), creds.password());
 
         return ResponseEntity.ok(jwt);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<JWTAuthResponse> registerUser(@RequestBody RegistrationDTO newUser) {
+    public ResponseEntity<JWTAuthResponse> registerUser(@RequestBody @Valid RegistrationDTO newUser) {
 
         JWTAuthResponse jwt = userService.registerNewUser(newUser);
 

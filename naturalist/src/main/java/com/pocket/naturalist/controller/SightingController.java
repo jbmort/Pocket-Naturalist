@@ -13,6 +13,8 @@ import com.pocket.naturalist.dto.SightingMapDTO;
 import com.pocket.naturalist.dto.SightingReportDTO;
 import com.pocket.naturalist.service.SightingService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/sightings")
 public class SightingController {
@@ -32,7 +34,7 @@ public class SightingController {
 
     @PostMapping("/{parkSlug}")
     public ResponseEntity<Void> createSighting(@PathVariable String parkSlug,
-            @RequestBody SightingReportDTO sightingData) {
+            @RequestBody @Valid SightingReportDTO sightingData) {
         String animalName = sightingData.animalName();
         Point locationOfAnimal = sightingData.locationOfAnimal();
         Point locationOfReport = sightingData.locationOfReport();

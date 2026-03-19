@@ -16,6 +16,8 @@ import com.pocket.naturalist.dto.ParkDataDTO;
 import com.pocket.naturalist.service.ParkService;
 import com.pocket.naturalist.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -40,7 +42,7 @@ public class AdminController {
     @PreAuthorize("@parkSecurity.isParkAdmin(authentication, #parkSlug)")
     @PutMapping("/park/{parkSlug}")
     public ResponseEntity<ParkDataDTO> updateParkData(@PathVariable String parkSlug,
-            @RequestBody ParkDataDTO data) {
+            @RequestBody @Valid ParkDataDTO data) {
         ParkDataDTO updatedData = parkService.updateParkData(parkSlug, data);
         return ResponseEntity.ok(updatedData);
     }

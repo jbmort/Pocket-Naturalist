@@ -15,6 +15,8 @@ import com.pocket.naturalist.service.GameificationService;
 import com.pocket.naturalist.service.LocationService;
 import com.pocket.naturalist.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/checkin")
 public class CheckInController {
@@ -32,7 +34,7 @@ public class CheckInController {
 
     @PostMapping("/{parkSlug}")
     public ResponseEntity<CheckInResponseDTO> checkIn(@PathVariable String parkSlug,
-            @RequestBody Point location,
+            @RequestBody @Valid Point location,
             Authentication authentication) {
         boolean isInside = locationService.isPointInsideParkBoundaries(location, parkSlug);
         CheckInResponseDTO responseDTO = new CheckInResponseDTO(parkSlug, isInside);
@@ -49,7 +51,7 @@ public class CheckInController {
     @PostMapping("/{parkSlug}/feature/{featureId}")
     public ResponseEntity<CheckInResponseFeatureDTO> checkInFeature(@PathVariable String parkSlug,
             @PathVariable long featureId,
-            @RequestBody Point location,
+            @RequestBody @Valid Point location,
             Authentication authentication) {
 
         boolean isNearFeature = locationService.isPointNearFeature(location, parkSlug, featureId);
