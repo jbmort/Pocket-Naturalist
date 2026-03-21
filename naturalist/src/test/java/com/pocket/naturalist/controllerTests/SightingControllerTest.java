@@ -46,19 +46,23 @@ class SightingControllerTest {
     private Park park;
 
     @Autowired
-    private MockMvc mockMvc; 
-
+    private MockMvc mockMvc;
 
     // --- SECURITY MOCKS ---
-    @MockitoBean private JwtService jwtService;
-    @MockitoBean(name = "parkSecurity") private ParkSecurity parkSecurity;
-    @MockitoBean private AuthenticationProvider authenticationProvider;
-    @MockitoBean private UserDetailsService userDetailsService;
-    
-    // --- CONTROLLER MOCKS ---
-    @MockitoBean private UserRepository userRepository; 
-    @MockitoBean private SightingService sightingService;
+    @MockitoBean
+    private JwtService jwtService;
+    @MockitoBean(name = "parkSecurity")
+    private ParkSecurity parkSecurity;
+    @MockitoBean
+    private AuthenticationProvider authenticationProvider;
+    @MockitoBean
+    private UserDetailsService userDetailsService;
 
+    // --- CONTROLLER MOCKS ---
+    @MockitoBean
+    private UserRepository userRepository;
+    @MockitoBean
+    private SightingService sightingService;
 
     @BeforeEach
     void setUp() {
@@ -68,19 +72,19 @@ class SightingControllerTest {
         park = new Park("Yellowstone");
     }
 
-
     @Test
     @WithMockUser
     void getRequestShouldReturnSightingDtoList() throws Exception {
         String parkSlug = park.getUrlSlug();
 
         when(sightingService.getSightingsForPark(parkSlug))
-        .thenReturn(new SightingMapDTO(parkSlug, List.of(new AnimalLocationsDTO(animal.getCommonName(), List.of(locationOfAnimal)))));
+                .thenReturn(new SightingMapDTO(parkSlug,
+                        List.of(new AnimalLocationsDTO(animal.getCommonName(), List.of(locationOfAnimal)))));
 
         this.mockMvc.perform(get("/sightings/" + parkSlug))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.parkSlug").value(parkSlug))
-            .andExpect(jsonPath("$.animalLocations").isArray());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.parkSlug").value(parkSlug))
+                .andExpect(jsonPath("$.animalLocations").isArray());
 
     }
 
@@ -90,11 +94,11 @@ class SightingControllerTest {
         String unknownParkSlug = "unknown-park";
 
         when(sightingService.getSightingsForPark(unknownParkSlug))
-        .thenThrow(new ResourceNotFoundException("Park not found"));
+                .thenThrow(new ResourceNotFoundException("Park not found"));
 
         this.mockMvc.perform(get("/sightings/" + unknownParkSlug))
-            .andExpect(status().isNotFound());
-      
+                .andExpect(status().isNotFound());
+
     }
 
     @Test
@@ -103,7 +107,7 @@ class SightingControllerTest {
         String invalidParkSlug = "invalid/park";
 
         this.mockMvc.perform(get("/sightings/" + invalidParkSlug))
-            .andExpect(status().isInternalServerError());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -112,10 +116,9 @@ class SightingControllerTest {
         String parkSlug = park.getUrlSlug();
         String animalName = "Bison";
         SightingReportDTO sightingReportDTO = new SightingReportDTO(
-            animalName,
-            locationOfAnimal,
-            locationOfAnimal
-        );
+                animalName,
+                locationOfAnimal,
+                locationOfAnimal);
 
         @SuppressWarnings("removal")
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new JtsModule());
@@ -123,11 +126,11 @@ class SightingControllerTest {
         System.out.println("Sighting Report DTO: " + sightingReportDTO.toString());
 
         when(sightingService.createSighting(animalName, locationOfAnimal, locationOfAnimal, parkSlug))
-        .thenReturn(true);
+                .thenReturn(true);
 
-        this.mockMvc.perform(post("/sightings/" + parkSlug).content(sightingJson).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+        this.mockMvc
+                .perform(post("/sightings/" + parkSlug).content(sightingJson).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
-    
 }
